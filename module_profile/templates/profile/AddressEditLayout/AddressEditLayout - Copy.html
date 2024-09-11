@@ -1,0 +1,224 @@
+{% extends "shared/_ProfileMainLayout.html" %}
+{% load static %}
+
+{% block extrajs %}
+    <script>let back_link = "{% url "module_profile:urls_profile_view" %}";</script>
+    <script src="{% static "" %}js/plugins/ajax-address-edit.js"></script>
+{% endblock %}
+
+{% block row %}
+    <div class="row">
+        <div class="col-12">
+            <div class="widget">
+                <div class="widget-content myaccount-address d-block p-0">
+                    <div class="checkout">
+                        <form action="#" class="checkout-form woocommerce-checkout">
+                            {% csrf_token %}
+                            <div class="customer-details">
+                                <div class="woocommerce-billing-fields">
+                                    <h3>
+                                        ویرایش آدرس
+                                    </h3>
+                                <br>
+
+                                    <span id="info_alert" class="alert-success"></span>
+                                    <!-- goback_button -->
+                                    <input type="hidden" id="back-button" name="back-button" class="mt-3 btn btn-info save-address" href="{{ back_address }}" value="بازگشت به صفحه قبلی" onclick="go_back()">
+
+                                    <div class="woocommerce-billing-fields-field-wrapper">
+
+                                        <!-- Back-Address -->
+                                        <input type="hidden" id="back-address" name="back-address"  value="{{ back_address }}">
+
+
+
+
+
+                                        <!-- item -->
+                                        <div class="row-cols-2 form-row validate-required">
+
+                                            <div class="col-md-1 col-sm-6 col-xs-12">
+                                                <label for="billing-first-name" class="first-name">نام
+                                                    <abbr class="required" title="ضروری">*</abbr>
+                                                    <span id="first_name_alert" class="alert-danger"></span>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-8 col-sm-6 col-xs-12">
+                                                <span class="woocommerce-input-wrapper">
+                                                    <input required type="text" class="input-first-name" name="billing-first-name" id="billing-first-name" value="{{ request.user.user_address_set.first.name }}" >
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="row-cols-2 form-row validate-required">
+                                            <div class="col-md-1 col-xs-12">
+                                                <label for="billing-last-name" class="last-name">نام خانوادگی
+                                                    <abbr class="required" title="ضروری">*</abbr>
+                                                    <span id="last_name_alert" class="alert-danger"></span>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-8 col-sm-6 col-xs-12">
+                                                <span class="woocommerce-input-wrapper">
+                                                    <input required type="text" class="input-last-name" name="billing-last-name" id="billing-last-name" value="{{ request.user.user_address_set.first.family }}" >
+                                                </span>
+                                            </div>
+                                        </div>
+
+
+
+
+
+
+
+
+
+{#                                        <!-- item -->#}
+{#                                        <div class="form-row form-row-first validate-required">#}
+{#                                            <label for="billing-first-name" class="first-name">نام#}
+{#                                                <abbr class="required" title="ضروری">*</abbr>#}
+{#                                                <span id="first_name_alert" class="alert-danger"></span>#}
+{#                                            </label>#}
+{#                                            <span class="woocommerce-input-wrapper">#}
+{#                                                <input required type="text" class="input-first-name" name="billing-first-name" id="billing-first-name" value="{{ request.user.user_address_set.first.name }}" >#}
+{#                                            </span>#}
+{#                                        </div>#}
+
+
+
+                                        <!-- item -->
+                                        <div class="form-row form-row-first validate-required">
+                                            <label for="billing-last-name" class="last-name">نام خانوادگی
+                                                <abbr class="required" title="ضروری">*</abbr>
+                                                <span id="last_name_alert" class="alert-danger"></span>
+                                            </label>
+                                            <span class="woocommerce-input-wrapper">
+                                                <input required type="text" class="input-last-name" name="billing-last-name" id="billing-last-name" value="{{ request.user.user_address_set.first.family }}" >
+                                            </span>
+                                        </div>
+                                        <!-- item State start-->
+                                        <div class="form-row form-row-first validate-required">
+                                            <label for="billing-state" class="">استان
+                                                <abbr class="required" title="ضروری">*</abbr>
+                                                <span id="state_alert" class="alert-danger"></span>
+                                            </label>
+                                            <span class="woocommerce-input-wrapper">
+                                                <div class="custom-select-ui">
+                                            <select required name="billing-state" id="billing-state" class="category" style="display: none;" >
+                                                <option value="0" {% if request.user.user_address_set.first.state == '0' %}selected {% endif %} >یک استان انتخاب کنید</option>
+                                                <option value="1" {% if request.user.user_address_set.first.state == '1' %}selected {% endif %} >تهران</option>
+                                                <option value="2" {% if request.user.user_address_set.first.state == '2' %}selected {% endif %}>گیلان</option>
+                                                <option value="3" {% if request.user.user_address_set.first.state == '3' %}selected {% endif %}>آذربایجان شرقی</option>
+                                                <option value="4" {% if request.user.user_address_set.first.state == '4' %}selected {% endif %}>خوزستان</option>
+                                                <option value="5" {% if request.user.user_address_set.first.state == '5' %}selected {% endif %}>فارس</option>
+                                                <option value="6" {% if request.user.user_address_set.first.state == '6' %}selected {% endif %}>اصفهان</option>
+                                                <option value="7" {% if request.user.user_address_set.first.state == '7' %}selected {% endif %}>خراسان رضوی</option>
+                                                <option value="8" {% if request.user.user_address_set.first.state == '8' %}selected {% endif %}>قزوین</option>
+                                                <option value="9" {% if request.user.user_address_set.first.state == '9' %}selected {% endif %}>سمنان</option>
+                                                <option value="10" {% if request.user.user_address_set.first.state == '10' %}selected {% endif %}>قم</option>
+                                                <option value="11" {% if request.user.user_address_set.first.state == '11' %}selected {% endif %}>مرکزی</option>
+                                                <option value="12" {% if request.user.user_address_set.first.state == '12' %}selected {% endif %}>زنجان</option>
+                                                <option value="13" {% if request.user.user_address_set.first.state == '13' %}selected {% endif %}>مازندران</option>
+                                                <option value="14" {% if request.user.user_address_set.first.state == '14' %}selected {% endif %}>گلستان</option>
+                                                <option value="15" {% if request.user.user_address_set.first.state == '15' %}selected {% endif %}>اردبیل</option>
+                                                <option value="16" {% if request.user.user_address_set.first.state == '16' %}selected {% endif %}>آذربایجان غربی</option>
+                                                <option value="17" {% if request.user.user_address_set.first.state == '17' %}selected {% endif %}>همدان</option>
+                                                <option value="18" {% if request.user.user_address_set.first.state == '18' %}selected {% endif %}>کردستان</option>
+                                                <option value="19" {% if request.user.user_address_set.first.state == '19' %} selected{% endif %} >کرمانشاه</option>
+                                                <option value="20" {% if request.user.user_address_set.first.state == '20' %}selected {% endif %}>لرستان</option>
+                                                <option value="21" {% if request.user.user_address_set.first.state == '21' %}selected {% endif %}>بوشهر</option>
+                                                <option value="22" {% if request.user.user_address_set.first.state == '22' %}selected {% endif %}>کرمان</option>
+                                                <option value="23" {% if request.user.user_address_set.first.state == '23' %}selected {% endif %}>هرمزگان</option>
+                                                <option value="24" {% if request.user.user_address_set.first.state == '24' %}selected {% endif %}>چهارمحال و بختیاری</option>
+                                                <option value="25" {% if request.user.user_address_set.first.state == '25' %}selected {% endif %}>یزد</option>
+                                                <option value="26" {% if request.user.user_address_set.first.state == '26' %}selected {% endif %}>سیستان و بلوچستان</option>
+                                                <option value="27" {% if request.user.user_address_set.first.state == '27' %}selected {% endif %}>ایلام</option>
+                                                <option value="28" {% if request.user.user_address_set.first.state == '28' %}selected {% endif %}>کهگلویه و بویراحمد</option>
+                                                <option value="29" {% if request.user.user_address_set.first.state == '29' %}selected {% endif %}>خراسان شمالی</option>
+                                                <option value="30" {% if request.user.user_address_set.first.state == '30' %}selected {% endif %}>خراسان جنوبی</option>
+                                                <option value="31" {% if request.user.user_address_set.first.state == '31' %}selected {% endif %}>البرز</option>
+                                            </select>
+                                                </div>
+                                            </span>
+                                        </div>
+
+                                        <!-- item State end-->
+{#                                        {% include "profile/AddressEditLayout/SelectStateCityLayout.html" %}#}
+
+                                        <!-- item -->
+                                            <div class="form-row form-row-first validate-required">
+                                                <label for="billing-city" class="">شهر
+                                                    <abbr class="required" title="ضروری">*</abbr>
+                                                    <span id="city_alert" class="alert-danger"></span>
+                                                </label>
+                                                <span class="woocommerce-input-wrapper">
+                                                    <input required type="text" class="input-billing-address" name="billing-city" id="billing-city" placeholder="شهر" value="{{ request.user.user_address_set.first.city }}">
+                                                </span>
+                                            </div>
+                                        <!-- item -->
+                                        <div class="form-row form-row-first validate-required">
+                                            <label for="billing-address" class="inline_label">آدرس پستی
+                                                <abbr class="required" title="ضروری">*</abbr>
+                                                <span id="address_alert" class="alert-danger"></span>
+                                            </label>
+                                            <span class="woocommerce-input-wrapper">
+                                                <input required type="text" class="input-billing-address" name="billing-address" id="billing-address" placeholder="خیابان کوچه پلاک ..." value="{{ request.user.user_address_set.first.address_detail }}" onkeydown="enable_save_button()" onchange="enable_save_button()">
+                                            </span>
+                                        </div>
+                                        <!-- item -->
+                                        <div class="form-row form-row-first validate-required">
+                                            <label for="billing-postcode" class="">کد پستی
+                                                <abbr class="required" title="ضروری">*</abbr>
+                                                <span id="postcode_alert" class="alert-danger"></span>
+                                            </label>
+                                            <span class="woocommerce-input-wrapper">
+                                                <input required type="text" maxlength="10" class="input-billing-postcode" name="billing-postcode" id="billing-postcode" value="{{ request.user.user_address_set.first.post_code }}"  onkeydown="enable_save_button()" onchange="enable_save_button()">
+                                            </span>
+                                        </div>
+
+                                        <!-- item -->
+                                        <div class="form-row form-row-first validate-required">
+                                            <label for="billing-phone" class="">موبایل
+                                                <abbr class="required" title="ضروری">*</abbr>
+                                                <span id="phone_alert" class="alert-danger"></span>
+                                            </label>
+                                            <span class="woocommerce-input-wrapper">
+                                                <input required type="text" maxlength="11" minlength="11" class="input-billing-phone" name="billing-phone" id="billing-phone" value="{{ request.user.user_address_set.first.phone }}"  onkeydown="enable_save_button()" onchange="enable_save_button()">
+                                            </span>
+                                        </div>
+
+
+
+                                        <!-- item -->
+                                        <div class="form-row form-row-first validate-required">
+                                            <label for="billing-email" class="">ایمیل
+                                                <abbr class="required" title="ضروری">*</abbr>
+                                                <span id="email_alert" class="alert-danger"></span>
+                                            </label>
+                                            <span class="woocommerce-input-wrapper">
+                                                <input required type="text" class="input-billing-email" name="billing-email" id="billing-email" value="{{ request.user.user_address_set.first.email }}"  onkeydown="enable_save_button()" onchange="enable_save_button()">
+                                            </span>
+                                        </div>
+
+{#                                        {% if force_message %}#}
+{#                                            <button type="button" disabled value="{% url "module_orders:urls_checkout" %}" class="mt-3 btn btn-info save-address" id="save-address" name="save-address" >ذخیره آدرس</button>#}
+{#                                        {% else %}#}
+{#                                            <button type="button" disabled value="{% url "module_profile:urls_profile_address_edit_ajax" %}" class="mt-3 btn btn-info save-address" id="save-address" name="save-address" >ذخیره آدرس</button>#}
+{#                                        {% endif %}#}
+
+                                        <button type="button" disabled class="mt-3 btn btn-info save-address" id="save-address" name="save-address" >ذخیره آدرس</button>
+
+                                        {% if "checkout" in back_address %}
+                                            <a href="{% url "module_orders:urls_cart" %}" class="mt-3 btn btn-secondary save-address" id="cancel-save-address" type="button">انصراف</a>
+                                        {% else %}
+                                            <a href="{{ back_address }}" class="mt-3 btn btn-secondary save-address" id="cancel-save-address" type="button">انصراف</a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

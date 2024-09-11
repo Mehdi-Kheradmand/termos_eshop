@@ -1,0 +1,61 @@
+{% extends "shared/MainLayout.html" %}
+{% load static %}
+
+{% block content %}
+    <main class="content">
+        <div class="container">
+            <div class="order-steps">
+                <div class="checkout-breadcrumb">
+                    <div class="title-cart">
+                        <i class="fal fa-bags-shopping"></i>
+                        <a>
+                            <h4>سبد خرید</h4>
+                        </a>
+                    </div>
+                    <div class="title-checkout">
+                        <i class="fal fa-file-invoice"></i>
+                        <a>
+                            <h4>جزئیات پرداخت</h4>
+                        </a>
+                    </div>
+                    <div class="title-thankyou">
+                        <i class="fal fa-receipt"></i>
+                        <a>
+                            <h4>تکمیل سفارش</h4>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="checkout">
+                <div class="text-center">
+                    <div class="icon-success warning">
+                        <i class="fal fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="order-success">
+                        <div class="h4 font-weight-bold mb-4">ثبت سفارش شما با موفقیت انجام نشد</div>
+                        <div class="font-weight-bold mb-12">چنانچه طی این فرایند مبلغی از حساب شما کسر شده است،طی 72 ساعت آینده به حساب شما باز خواهد گشت.</div>
+                        {% if message %}
+                            <hr>
+                            <span class="alert-danger">پیام دریافتی از درگاه پرداخت : {{ message }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="order-actions">
+
+                        {% if card_id %}  {#  if card payment is failed by error and card_is_paid=True #}
+                            <a href="{% url "module_orders:urls_checkout_repay" cart_id %}" class="btn btn-secondary btn-order-tracking">
+                        {% else %} {# if card_payment is cancelled by user and the card kept as current_active cart #}
+                            <a href="{% url "module_orders:urls_checkout" %}" class="btn btn-secondary btn-order-tracking">
+                        {% endif %}
+
+                            <i class="fa fa-repeat"></i>
+                            پرداخت مجدد
+                        </a>
+                        <a href="{% url "module_contact-us:urls_contact-us_view" %}" class="btn btn-danger btn-order-tracking btn-contact-backup"><i class="fa fa-phone"></i>
+                            تماس با پشتیبان
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

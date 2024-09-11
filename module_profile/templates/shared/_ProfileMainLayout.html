@@ -1,0 +1,195 @@
+{% load static %}
+{% load render_partial %}
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        {% render_partial 'termos_eshop.views.partial_title_icon_view' %}
+
+        <!-- fontAwesome -->
+        <link rel="stylesheet" href="{% static "" %}css/font-awesome.min.css">
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="{% static "" %}bootstrap/css/bootstrap.min.css">
+        <!-- CSS Implementing Plugins -->
+        <link rel="stylesheet" href="{% static "" %}css/plugins/nice-select.css">
+        <link rel="stylesheet" href="{% static "" %}css/plugins/swiper-bundle.min.css">
+        <link rel="stylesheet" href="{% static "" %}css/plugins/noUISlider.min.css">
+        <!-- mainStyle -->
+        <link rel="stylesheet" href="{% static "" %}css/main.css">
+        <link rel="stylesheet" href="{% static "" %}css/responsive.css">
+        {% block extraCss %}{% endblock %}
+    </head>
+
+
+    <body>
+        <!-- content -->
+        <main class="content mt-0">
+            <div class="container">
+                <div class="row">
+                    <!-- Mobile_sidebar -->
+                    {% include "shared/_MobileSidebarComponent.html" %}
+                    <div class="nav-btn nav-slider nav-profile">
+                        <span class="linee1"></span>
+                        <span class="linee2"></span>
+                        <span class="linee3"></span>
+                    </div>
+                    <div class="overlay"></div>
+                    <div class="col-lg-3">
+                        <nav class="woocommerce-MyAccount-navigation MyAccount-navigation-none">
+
+
+                            <div class="my-account-info">
+                                <a href="{% url "module_profile:urls_profile_view" %}" class="gravatar">
+                                    <img src="{% static "" %}images/avatar/avatar.jpg" class="img-fluid avatar" alt="{{ site_settings.site_title }}">
+                                </a>
+                                <span class="username">{{ request.user.get_full_name }}</span>
+                            </div>
+
+                            <div class="my-account-menu">
+                                <div class="item-menu">
+                                    <a href="{% url "urls_Home_Page" %}">
+                                        <i class="fal fa-store"></i>
+                                            صفحه اصلی فروشگاه
+                                    </a>
+                                </div>
+                                <div class="item-menu">
+                                    <a href="{% url "module_orders:urls_cart" %}">
+                                        <i class="fal fa-shopping-bag"></i>
+                                        سبد خرید
+                                    </a>
+                                </div>
+                            </div>
+
+
+                            <ul>
+                                <li class="MyAccount-navigation-link MyAccount-navigation-link-dashboard
+                                 {% if "dashboard" in request.path %} is-active {% endif %}" >
+                                    <a href="{% url "module_profile:urls_profile_view" %}">
+                                        <i class="fal fa-tachometer"></i>
+                                        پیشخوان
+                                    </a>
+                                </li>
+
+                                {% if request.user.useradditional.IsSeller %}
+                                    <li class="MyAccount-navigation-link MyAccount-navigation-link-seller
+                                    {% if 'seller' in request.path %}
+                                        is-active
+                                    {% endif %}
+                                     ">
+                                        <a href="{% url "module_profile:urls_profile_seller_main" %}">
+                                            <i class="fal fa-bags-shopping"></i>
+                                            <span class="text-success">
+                                            محصولات من
+                                            </span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+
+
+
+                                <li class="MyAccount-navigation-link MyAccount-navigation-link-orders
+                                {% if "profile/orders_history" in request.path %} is-active {% endif %}" >
+                                    <a href="{% url "module_profile:urls_profile_orders_history" %}">
+                                        <i class="fal fa-shopping-basket"></i>
+                                        سفارش ها
+                                    </a>
+                                </li>
+
+                                <li class="MyAccount-navigation-link MyAccount-navigation-link-wishlists
+                                {% if "profile/wishlist" in request.path %} is-active {% endif %}" >
+                                    <a href="{% url "module_profile:urls_profile_wishlist" %}">
+                                        <i id="wish_fa_{{ product.id }}" class="fal fa-heart"></i>
+                                        علاقه مندی ها
+                                    </a>
+                                </li>
+                                <li class="MyAccount-navigation-link MyAccount-navigation-link-edit-address
+                                {% if request.path ==  "/profile/address_edit/" %} is-active {% endif %}" >
+                                    <a href="{% url "module_profile:urls_profile_address_edit" %}">
+                                        <i class="fal fa-home"></i>
+                                        آدرس‌ گیرنده سفارشات
+                                    </a>
+                                </li>
+                                <li class="MyAccount-navigation-link MyAccount-navigation-link-edit-account
+                                {% if "edit_profile" in request.path %} is-active {% endif %}" >
+                                    <a href="{% url "module_profile:urls_profile_edit_profile" %}">
+                                        <i class="fal fa-user"></i>
+                                        ویرایش حساب کاربری (تغییر رمز عبور)
+                                    </a>
+                                </li>
+                                <li class="MyAccount-navigation-link MyAccount-navigation-link-customer-logout">
+                                    <a href="{% url "module_users:urls_Logout" %}">
+                                        <i class="fal fa-sign-in"></i>
+                                        خروج از حساب کاربری
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="col-lg-9 col-xs-12">
+                        <div class="woocommerce-MyAccount-content">
+                            <header class="user-header">
+                                <div class="account-head-icon">
+                                    <ul>
+                                        <li>
+                                            <a href="{% url "module_users:urls_Logout" %}" class="logout">
+                                                <i class="fal fa-power-off"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{% url "module_profile:urls_profile_edit_profile" %}" class="setting">
+                                                <i class="fal fa-cog"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{% url "urls_Home_Page" %}" class="home">
+                                                <i class="fal fa-house-flood"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </header>
+
+                            {% block row %}{% endblock %}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+
+
+        <!-- footer -->
+        <footer class="user-footer">
+            <div class="container">
+                <div class="footer-down">
+                    <div class="gototop">
+                        <i class="fal fa-angle-up"></i>
+                    </div>
+                    <div class="copy-right">کلیه حقوق مادی و معنوی برای وبسایت ترموس محفوظ می باشد.</div>
+                </div>
+            </div>
+        </footer>
+        <!-- footer -->
+    </body>
+
+    <!-- JS Global Compulsory -->
+    <script src="{% static "" %}js/plugins/jquery-3.6.0.min.js"></script>
+    <script src="{% static "" %}js/plugins/popper.min.js"></script>
+    <script src="{% static "" %}bootstrap/js/bootstrap.min.js"></script>
+    <!-- JS Implementing Plugins -->
+    <script src="{% static "" %}js/plugins/jquery.nice-select.min.js"></script>
+    <script src="{% static "" %}js/plugins/swiper-bundle.min.js"></script>
+    <script src="{% static "" %}js/plugins/countdown.min.js"></script>
+    <script src="{% static "" %}js/plugins/theia-sticky-sidebar.min.js"></script>
+    <script src="{% static "" %}js/plugins/nouislider.min.js"></script>
+    <script src="{% static "" %}js/plugins/wNumb.js"></script>
+    <!-- JS Template -->
+    <script src="{% static "" %}js/main.js"></script>
+
+    {% block extrajs %}{% endblock %}
+</html>

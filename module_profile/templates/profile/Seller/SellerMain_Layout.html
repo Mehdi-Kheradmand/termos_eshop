@@ -1,0 +1,124 @@
+{% extends "shared/_ProfileMainLayout.html" %}
+{% load static %}
+
+{% block extrajs %}
+    <script src="{% static "" %}js/plugins/ajax-seller.js"></script>
+{% endblock %}
+
+
+{% block row %}
+    <form method="post" name="products_form" id="products_form">
+        <div class="col-12">
+            <div class="widget">
+                <div class="widget-title">
+                    محصولات فروشنده
+                    <span class="text-danger" hidden style="margin-right: 10pt" id="alert_stock_price">قیمت و موجودی را پر کنید (فقط اعداد)</span>
+                    <span class="text-danger" hidden style="margin-right: 10pt" id="alert_title">عنوان ها نمیتواند خالی باشد</span>
+                </div>
+                <div class="widget-content user-detail-orders">
+
+                {#  if user is  Superuser then show all of the products else > show owned products  #}
+                    {% if request.user.is_superuser %}
+                        <table class="table table-bordered table-responsive">
+                        <thead class="thead-dark sticky-top">
+                            <tr>
+                                <th scope="col">شناسه</th>
+                                <th scope="col">نام فروشنده</th>
+                                <th scope="col">عنوان محصول</th>
+                                <th scope="col">موجودی</th>
+                                <th scope="col">قیمت خرید</th>
+                                <th scope="col">قیمت فروش</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for product in allActiveProducts %}
+                                <input id="{{ product.id }}" value="{{ product.id }}" type="hidden" />
+                                <tr>
+
+                                    <td class="col-md-1">
+                                        <a href="{% url "module_products:urls_product_detail" product.id product.get_slug %}">
+                                            <span style="margin-right: 10pt">{{ product.id }}</span>
+                                        </a>
+                                    </td>
+
+                                    <td>
+                                        <p style="margin-top: 25pt">{{ product.Seller.get_full_name }}</p>
+                                    </td>
+
+                                    <td class="col-md-3">
+                                        <label for="title_{{ product.id }}" class="sr-only">عنوان</label>
+                                        <input id="title_{{ product.id }}" class="form-control form-control-sm" type="text" onchange="value_changed(this.value)" onkeyup="value_changed(this.value)" size="25" value="{{ product.title }}" style="margin-top: 25pt"/>
+                                    </td>
+
+                                    <td>
+                                        <label for="stock_{{ product.id }}" class="sr-only">موجودی</label>
+                                        <input id="stock_{{ product.id }}" class="form-control form-control-sm" type="text" onchange="value_changed(this.value)" onkeyup="value_changed(this.value)" size="5" value="{{ product.stock }}" style="margin-top: 25pt"/>
+                                    </td>
+
+                                    <td>
+                                        <label for="price_{{ product.id }}" class="sr-only">قیمت خرید</label>
+                                        <input id="price_{{ product.id }}" class="form-control form-control-sm" type="text" onchange="value_changed(this.value)" onkeyup="value_changed(this.value)" size="5" value="{{ product.get_incoming_price_with_comma }}" style="margin-top: 25pt"/>
+                                    </td>
+
+                                    <td>
+                                        <label for="price_{{ product.id }}" class="sr-only">قیمت فروش</label>
+                                        <input id="price_{{ product.id }}" class="form-control form-control-sm" type="text" onchange="value_changed(this.value)" onkeyup="value_changed(this.value)" size="5" value="{{ product.get_price_with_comma }}" style="margin-top: 25pt"/>
+                                    </td>
+
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                        <table class="table table-bordered table-orders">
+                        <thead class="thead-light sticky-top">
+                            <tr>
+                                <th scope="col">تصویر محصول</th>
+                                <th scope="col">عنوان محصول</th>
+                                <th scope="col">موجودی</th>
+                                <th scope="col"> قیمت (تومان)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for product in request.user.Product_Seller.all %}
+                                <input id="{{ product.id }}" value="{{ product.id }}" type="hidden" />
+
+                                <tr>
+                                    <td>
+                                        <a href="{% url "module_products:urls_product_detail" product.id product.get_slug %}">
+                                            <img src="{{ product.main_small_image.url }}" alt="product" width="90" height="90">
+                                        </a>
+                                    </td>
+
+                                    <td>
+                                        <label for="title_{{ product.id }}" class="sr-only">عنوان</label>
+                                        <input id="title_{{ product.id }}" class="form-control form-control-sm" type="text" onchange="value_changed(this.value)" onkeyup="value_changed(this.value)" size="25" value="{{ product.title }}" style="margin-top: 25pt"/>
+                                    </td>
+                                    <td>
+                                        <label for="stock_{{ product.id }}" class="sr-only">موجودی</label>
+                                        <input id="stock_{{ product.id }}" class="form-control form-control-sm" type="text" onchange="value_changed(this.value)" onkeyup="value_changed(this.value)" size="5" value="{{ product.stock }}" style="margin-top: 25pt"/>
+                                    </td>
+
+                                    <td>
+                                        <label for="price_{{ product.id }}" class="sr-only">قیمت</label>
+                                        <input id="price_{{ product.id }}" class="form-control form-control-sm" type="text" onchange="value_changed(this.value)" onkeyup="value_changed(this.value)" size="5" value="{{ product.get_incoming_price_with_comma }}" style="margin-top: 25pt"/>
+                                    </td>
+
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% endif %}
+
+
+                    <div style="margin-left: auto">
+                        {% csrf_token %}
+                        <input type="button" id="btn_submit" name="btn_submit" disabled value="ثبت اطلاعات" class="btn btn-success" onclick="do_jobs({% if request.user.is_superuser %}true{% endif %})">
+                        <span class="success_alert" hidden="hidden" id="success_alert">اطلاعات با موفقیت ثبت شد</span>
+                    </div>
+                    <div class="right"></div><a class="btn btn-info" href="{% url "module_profile:urls_profile_view" %}">انصراف</a></div>
+
+                </div>
+            </div>
+    </form>
+{% endblock %}

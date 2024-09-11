@@ -1,0 +1,40 @@
+# docker-compose.yml
+
+services:
+  django:
+    container_name: termos_django
+    build:
+      context: ./
+      dockerfile: Dockerfile
+#    command: gunicorn termos_eshop.wsgi:application --bind 0.0.0.0:8000
+    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+#    command: sh -c "python manage.py migrate && gunicorn termos_eshop.wsgi:application --bind 0.0.0.0:8000"
+    volumes:
+      - .:/app/
+    ports:
+      - "8000:8000"
+    environment:
+      - DJANGO_SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE}
+      - SECRET_KEY=${SECRET_KEY}
+      - SMS_API_TOKEN=${SMS_API_TOKEN}
+      - DEBUG=${DEBUG}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+    depends_on:
+      - psql_container
+
+  psql_container:
+    image: postgres:16-bookworm
+    container_name: termos_psql
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - termos_postgres_data:/var/lib/postgresql/data/
+
+volumes:
+  termos_postgres_data:

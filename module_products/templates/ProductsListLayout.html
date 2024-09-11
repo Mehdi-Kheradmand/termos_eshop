@@ -1,0 +1,106 @@
+{% extends "shared/MainLayout.html" %}
+{% load static %}
+
+{% block header_extra_ref %}
+    <link rel="stylesheet" href="{% static "" %}css/plugins/noUISlider.min.css">
+{% endblock %}
+
+
+
+{% block content %}
+    <!-- content -->
+    <main class="content mt-3">
+        <div class="container" id="container">
+            <nav aria-label="breadcrumb" class="breadcrumb-nav">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">خانه</a></li>
+                    {% if main_category.slug %}
+                        <li class="breadcrumb-item" aria-current="page">
+                            <a href="{% url "module_products:urls_products_list" main_category.slug %}">{{ main_category.title }}</a>
+                        </li>
+                    {% else %}
+                        <li class="breadcrumb-item" aria-current="page">
+                            <a href="{% url "module_products:urls_products_search_tag"%}?q={{ main_category }}">{{ main_category }}</a>
+                        </li>
+                    {% endif %}
+                    {% if sub_category %}
+                        <li class="breadcrumb-item" aria-current="page">
+                            <a href="{% url "module_products:urls_product_list_sub_category" main_category.slug sub_category.slug %}">{{ sub_category.title }}</a>
+                        </li>
+                    {% endif %}
+                </ol>
+            </nav>
+
+            <div id="ajax_products_list">
+                {% include "Component/AjaxProductsList.html" %}
+            </div>
+
+
+        </div>
+    </main>
+    <!-- content -->
+{% endblock %}
+
+
+
+
+{% block footer_extra_ref %}
+<script src="{% static "" %}js/plugins/theia-sticky-sidebar.min.js"></script>
+<script src="{% static "" %}js/plugins/nouislider.min.js"></script>
+<script src="{% static "" %}js/plugins/wNumb.js"></script>
+
+<script>
+    //    price-range Desktop
+    var nonLinearStepSlider = document.getElementById('slider-non-linear-step');
+    if ($('#slider-non-linear-step').length) {
+        noUiSlider.create(nonLinearStepSlider, {
+            start: [0, {{ db_max_price }}],
+            connect: true,
+            direction: 'rtl',
+            format: wNumb({
+                decimals: 0,
+                thousand: ','
+            }),
+            range: {
+                'min': [0],
+                '10%': [1000, 1000],
+                {#'50%': [40000, 1000],#}
+                'max': [{{ db_max_price }}]
+            }
+        });
+        var nonLinearStepSliderValueElement = document.getElementById('slider-non-linear-step-value');
+
+        nonLinearStepSlider.noUiSlider.on('update', function (values) {
+            nonLinearStepSliderValueElement.innerHTML = values.join(' - ');
+        });
+    }
+    //    price-range Mobile
+    var nonLinearStepSlider2 = document.getElementById('slider-non-linear-step2');
+    if ($('#slider-non-linear-step2').length) {
+        noUiSlider.create(nonLinearStepSlider2, {
+            start: [0, {{ db_max_price }}],
+            connect: true,
+            direction: 'rtl',
+            format: wNumb({
+                decimals: 0,
+                thousand: ','
+            }),
+            range: {
+                'min': [0],
+                '10%': [1000, 1000],
+                {#'50%': [40000, 1000],#}
+                'max': [{{ db_max_price }}]
+            }
+        });
+        var nonLinearStepSliderValueElement2 = document.getElementById('slider-non-linear-step-value2');
+
+        nonLinearStepSlider2.noUiSlider.on('update', function (values) {
+            nonLinearStepSliderValueElement2.innerHTML = values.join(' - ');
+        });
+    }
+</script>
+
+    <script src="{% static "" %}js/plugins/ajax_add_to_favorites_and_cart.js"></script>
+    <script src="{% static "" %}js/plugins/ajax_products_filter.js"></script>
+
+{% endblock %}

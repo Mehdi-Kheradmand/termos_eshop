@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{{ site_settings.site_title }}</title>
+        <link rel="icon" type="image/x-icon" href="{{ site_settings.favicon.url }}">
+
+        {% include "shared/_HeaderRef.html" %}
+        {% block header_extra_ref %}{% endblock %}
+        <!-- mainStyle -->
+        <link rel="stylesheet" href="{% static "" %}css/main.css">
+        <link rel="stylesheet" href="{% static "" %}css/responsive.css">
+    </head>
+
+    <body>
+        {% block content %}{% endblock %}
+        <!-- JS Global Compulsory -->
+        <script src="{% static "" %}js/plugins/jquery-3.6.0.min.js"></script>
+        <script src="{% static "" %}js/plugins/popper.min.js"></script>
+        <script src="{% static "" %}bootstrap/js/bootstrap.min.js"></script>
+        <!-- JS Implementing Plugins -->
+        <script src="{% static "" %}js/plugins/jquery.nice-select.min.js"></script>
+        <script src="{% static "" %}js/plugins/swiper-bundle.min.js"></script>
+        <script src="{% static "" %}js/plugins/countdown.min.js"></script>
+        {% block footer_extra_ref %}{% endblock %}
+        <!-- JS Template -->
+        <script src="{% static "" %}js/main.js"></script>
+        <!-- JS For Ajax in module_users -->
+        <script src="{% static "" %}js/plugins/module_user.js"></script>
+
+        {% block extrajs %}{% endblock %}
+    </body>
+
+</html>

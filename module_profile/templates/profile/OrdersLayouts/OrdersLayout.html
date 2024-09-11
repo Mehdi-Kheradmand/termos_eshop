@@ -1,0 +1,109 @@
+{% extends "shared/_ProfileMainLayout.html" %}
+
+{% block row %}
+    <div class="row">
+        <div class="col-12">
+            <div class="widget">
+                <div class="widget-title">
+                    همه ی سفارش ها
+                </div>
+                <div class="widget-content user-detail-orders">
+                    <table class="table table-responsive table-orders">
+                        <thead class="thead-light">
+                            <tr>
+{#                                <th scope="col"></th>#}
+                                <th scope="col">شماره سفارش</th>
+                                <th scope="col">تاریخ ثبت سفارش</th>
+                                <th scope="col">تعداد محصول</th>
+                                <th scope="col">مبلغ سفارش</th>
+                                <th scope="col">عملیات پرداخت</th>
+                                <th scope="col">وضعیت</th>
+                                <th scope="col">جزئیات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+
+
+
+                                {% for main_order in header_cart %}
+                                    <tr>
+                                        <td>{{ main_order.get_id_plus_1000 }}</td>
+
+                                        <td>{{ main_order.payment_date }}</td>
+                                        <td>{{ main_order.get_amount }}</td>
+
+                                        <td>
+                                            <span class="price text-primary">{{ main_order.get_total_price_with_comma }}
+                                                <span class="amount text-secondary">تومان</span>
+                                            </span>
+                                        </td>
+
+                                        <td>
+{#                                            <!-- payment_status -->#}
+                                            {% if main_order.payment_status == 0 %}
+                                                <div class="success-payment align-content-center">پرداخت موفق</div>
+                                            {% elif main_order.payment_status == 1 %}
+                                                <div class="alert-warning align-content-center">پرداخت ناموفق
+                                                        <a class="btn-info" href="{% url "module_orders:urls_checkout_repay" main_order.id %}"> پرداخت مجدد</a>
+                                                </div>
+                                            {% elif main_order.payment_status == 2 %}
+                                                <div class="alert-info align-content-center">درحال‌بررسی</div>
+                                            {% elif main_order.payment_status == 3 %}
+                                                <div class="alert-danger align-content-center">لغو شده</div>
+                                            {% elif main_order.payment_status == 4 %}
+                                                <div class="alert-warning align-content-center">مرجوع شده</div>
+                                            {% else %}
+                                                <div class="alert-info align-content-center">درحال‌بررسی</div>
+                                            {% endif %}
+                                        </td>
+
+                                        <td>
+                                            {% if main_order.package_status == -1 %}
+                                                {% if main_order.error_message %}
+                                                    <div class="alert-warning align-content-center">{{ main_order.error_message }}</div>
+                                                {% else %}
+                                                    <div class="alert-warning align-content-center">نامعلوم</div>
+                                                {% endif %}
+                                            {% elif main_order.package_status == 0 %}
+                                                {% if main_order.payment_status == 0 %}
+                                                    <div class="alert-info align-content-center">درحال‌جمع‌آوری</div>
+                                                {% elif main_order.payment_status == 4 %}
+                                                    <div class="alert-warning align-content-center">درحال‌بررسی</div>
+                                                {% endif %}
+                                            {% elif main_order.package_status == 1 %}
+                                                {% if main_order.payment_status == 0 %}
+                                                    <div class="alert-info align-content-center">بسته‌بندی‌ شده</div>
+                                                {% elif main_order.payment_status == 4 %}
+                                                    <div class="alert-success align-content-center">هزینه‌برگشت ‌خورده</div>
+                                                {% endif %}
+                                            {% elif main_order.package_status == 2 %}
+                                                {% if main_order.payment_status == 0 %}
+                                                    <div class="alert-success align-content-center">ارسال شده</div>
+                                                {% elif main_order.payment_status == 4 %}
+                                                    <div class="alert-danger align-content-center">غیر‌قابل‌ قبول</div>
+                                                {% endif %}
+                                            {% else %}
+                                                <div class="alert-warning align-content-center">{{ main_order.package_status }}نامعلوم </div>
+                                            {% endif %}
+                                        </td>
+
+                                        <td>
+                                            <a href="{% url "module_profile:urls_profile_order_detail" main_order.id %}" class="details">
+                                                <i class="fal fa-angle-left"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+
+
+
+
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

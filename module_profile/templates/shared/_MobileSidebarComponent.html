@@ -1,0 +1,104 @@
+{% load static %}
+<nav class="sidebar">
+    <div class="woocommerce-MyAccount-navigation">
+        <div class="my-account-info">
+            <a href="#" class="gravatar">
+                <img src="{% static "" %}images/avatar/avatar.jpg" alt="avatar" class="img-fluid avatar">
+            </a>
+            <span class="username">{{ request.user.get_full_name }}</span>
+        </div>
+        <div class="my-account-menu">
+            <div class="item-menu">
+                <a href="{% url "urls_Home_Page" %}">
+                    <i class="fal fa-store"></i>
+                    صفحه اصلی ترموس
+                </a>
+            </div>
+            <div class="item-menu">
+                <a href="{% url "module_orders:urls_cart" %}">
+                    <i class="fal fa-shopping-bag"></i>
+                    سبد خرید
+                </a>
+            </div>
+        </div>
+        <ul>
+            <li class="MyAccount-navigation-link MyAccount-navigation-link-dashboard
+            {% if 'dashboard' in request.path %}
+                is-active
+            {% endif %} 
+             ">
+                <a href="{% url "module_profile:urls_profile_view" %}">
+                    <i class="fal fa-tachometer"></i>
+                    پیشخوان
+                </a>
+            </li>
+
+
+
+            {% if request.user.useradditional.IsSeller %}
+                <li class="MyAccount-navigation-link MyAccount-navigation-link-seller
+                {% if 'seller' in request.path %}
+                    is-active
+                {% endif %}
+                 ">
+                    <a href="{% url "module_profile:urls_profile_seller_main" %}">
+                        <i class="fal fa-bags-shopping"></i>
+                            <span class="text-success">
+                                محصولات من
+                            </span>
+                    </a>
+                </li>
+            {% endif %}
+
+
+
+
+            <li class="MyAccount-navigation-link MyAccount-navigation-link-orders
+            {% if 'orders_history' in request.path %}
+                is-active
+            {% endif %}
+             ">
+                <a href="{% url "module_profile:urls_profile_orders_history" %}">
+                    <i class="fal fa-shopping-basket"></i>
+                    سفارش ها
+                </a>
+            </li>
+            <li class="MyAccount-navigation-link MyAccount-navigation-link-wishlists
+            {% if 'wishlist' in request.path %}
+                is-active
+            {% endif %}
+             ">
+                <a href="{% url "module_profile:urls_profile_wishlist" %}">
+                    <i id="wish_fa_{{ product.id }}" class="fal fa-heart"></i>
+                    علاقه مندی ها
+                </a>
+            </li>
+            <li class="MyAccount-navigation-link MyAccount-navigation-link-edit-address
+            {% if 'address_edit' in request.path %}
+                is-active
+            {% endif %}
+             ">
+                <a href="{% url "module_profile:urls_profile_address_edit" %}">
+                    <i class="fal fa-home"></i>
+                    آدرس‌ ارسال سفارشات
+                </a>
+            </li>
+            <li class="MyAccount-navigation-link MyAccount-navigation-link-edit-account
+            {% if 'edit_profile' in request.path %}
+                is-active
+            {% endif %}
+             ">
+                <a href="{% url "module_profile:urls_profile_edit_profile" %}">
+                    <i class="fal fa-user"></i>
+                    ویرایش حساب کاربری
+                </a>
+            </li>
+            <li class="MyAccount-navigation-link MyAccount-navigation-link-customer-logout">
+                <a href="{% url "module_users:urls_Logout" %}">
+                    <i class="fal fa-sign-in"></i>
+                    خروج از حساب کاربری
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>

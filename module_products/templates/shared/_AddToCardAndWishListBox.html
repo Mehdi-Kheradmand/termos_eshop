@@ -1,0 +1,28 @@
+<ul class="add-to-links">
+    <li>
+        <div class="add-to-wishlist">
+            <div class="add-to-wishlist">
+                <a href="#" id="{{ prefix }}_wish_a_{{ the_product.id }}" onclick="add_to_wishlist({{ the_product.id }}, this.id)" class="{% if request.user in the_product.wisher_users.all %}active{% endif %}"
+                   title="افزودن ‌به ‌علاقه‌مندی‌ها">
+                    <i id="{{ prefix }}_wish_fa_{{ the_product.id }}" class="fal fa-heart"></i>
+                </a>
+            </div>
+        </div>
+    </li>
+    <li>
+{#        <div class="add-to-cart" id="div_{{ the_product.id }}">#}
+        {% if the_product.stock %}
+            <div class="add-to-cart">
+                <a href="#" id="{{ prefix }}_add_a_{{ the_product.id }}" onclick="add_to_cart({{ the_product.id }}, this.id)" title="افزودن‌به‌سبد">
+                    <i id="{{ prefix }}_add_fa_{{ the_product.id }}" class="fal fa-shopping-cart"></i>
+                </a>
+            </div>
+        {% else %}
+            <div class="add-to-cart ">
+                <span title="اتمام موجودی">
+                    <i id="{{ prefix }}_add_fa_{{ the_product.id }}" class="fal fa-exclamation-triangle"></i>
+                </span>
+            </div>
+        {% endif %}
+    </li>
+</ul>

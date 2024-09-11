@@ -1,0 +1,112 @@
+<form action="#" method="post" id="user_flex_form" name="user_flex_form">
+{#                                {% for error in login_form.email_phone.errors %}#}
+{#                                    <div class="alert alert-danger">#}
+{#                                        <p>{{ error }}</p>#}
+{#                                    </div>#}
+{#                                {% endfor %}#}
+
+    {% csrf_token %}
+    <div id="error_viewer"></div>
+    <input type="hidden" id="id_input_next_req_addr" value="{{ next_req_addr }}">
+
+
+    {# emailphone Form #}
+    {% if context_form.input_email_phone %}
+        <label class="small" for="{{ context_form.input_email_phone.auto_id }}">{{ context_form.input_email_phone.label }}</label>
+        <div class="item-account">{{ context_form.input_email_phone }}</div>
+        <br>
+        <div class="action-account">
+            <div class="g-recaptcha" data-sitekey="6LdONoYgAAAAADpXdgiCB3AfS-yrL-K4WaMJvUTg"></div>
+            <br>
+            <button type="button" onclick="{{ btn_onclick }}" name="btn_send" id="btn_send" class=" btn loginBtn">ورود به حساب کاربری</button>
+        </div>
+
+
+
+
+    {# password Form (when user entered Email) #}
+    {% elif context_form.input_password and not context_form.input_first_name %}
+
+        {{ context_form.input_hidden_email }}
+
+        <label class="small" for="{{ context_form.input_password.auto_id }}">{{ context_form.input_password.label }}</label>
+        <div class="item-account">{{ context_form.input_password }}</div>
+        <br>
+        <div class="action-account">
+            <br>
+            <button type="button" onclick="{{ btn_onclick }}" name="btn_send" id="btn_send" class=" btn loginBtn">ورود</button>
+            <a class="lost" href="#">بازیابی گذرواژه</a>
+            <a class="lost" href="{% url "module_users:urls_Login_Page" %}">ورود با شماره موبایل</a>
+        </div>
+
+
+
+
+    {# Otp_Form (When user entered Phone) #}
+    {% elif context_form.input_otp %}
+        {{ context_form.input_hidden_phone }}
+
+
+        <div class="title"> برای شماره همراه {{ context_form.input_hidden_phone.value }} کد تایید ارسال شد
+            <a href="{% url "module_users:urls_Login_Page" %}" class="edit-number-link">ویرایش شماره</a>
+        </div>
+        <br>
+        <label class="small" for="{{ context_form.input_otp.auto_id }}">{{ context_form.input_otp.label }}</label>
+        <div class="item-account">{{ context_form.input_otp }}</div>
+        <br><br>
+        <div class="action-account">
+            <br>
+            <button type="button" onclick="{{ btn_onclick }}" name="btn_send" id="btn_send" class=" btn loginBtn"> ورود | ثبت نام</button>
+        </div>
+        <br><br>
+
+        <!-- TIMER -->
+        <div class="form-account-row">
+            <div class="receive-verify-code">
+                <p id="countdown-verify-end"></p>
+            </div>
+        </div>
+
+    {# RegisterForm #}
+    {% elif context_form.input_first_name %}
+        {{ context_form.input_hidden_hash_code }}
+
+        <label class="small" for="{{ context_form.input_first_name.auto_id }}">{{ context_form.input_first_name.label }}</label>
+        <div class="item-account">{{ context_form.input_first_name }}</div>
+        <br>
+        <label class="small" for="{{ context_form.input_last_name.auto_id }}">{{ context_form.input_last_name.label }}</label>
+        <div class="item-account">{{ context_form.input_last_name }}</div>
+        <br>
+        <label class="small" for="{{ context_form.input_email.auto_id }}">{{ context_form.input_email.label }}</label>
+        <div class="item-account">{{ context_form.input_email }}</div>
+        <br>
+        <label class="small" for="{{ context_form.input_password.auto_id }}">{{ context_form.input_password.label }}</label>
+        <div class="item-account">{{ context_form.input_password }}</div>
+        <br>
+        <label class="small" for="{{ context_form.input_phone_number.auto_id }}">{{ context_form.input_phone_number.label }}</label>
+        <div class="item-account">{{ context_form.input_phone_number }}</div>
+
+        <br>
+        <div class="action-account">
+            <br>
+            <button type="button" onclick="{{ btn_onclick }}" name="btn_send" id="btn_send" class=" btn loginBtn">ثبت نام و ورود به وبسایت</button>
+        </div>
+
+    {#  Welcome Page  #}
+    {% else %}
+
+        <br>
+        <div class="title">خوش آمدید</div>
+        <div class="made-account">
+            <h2>حساب کاربری شما در ترموس ساخته شد</h2>
+        </div>
+
+        <div class="action-account">
+            <br>
+            <a href="{% url "urls_Home_Page" %}" type="button" class="loginBtn">بازگشت به صفحه اصلی</a>
+            <a href="{% url "module_profile:urls_profile_view" %}" type="button" class="loginBtn">ورود به پنل کاربری</a>
+        </div>
+
+    {% endif %}
+
+</form>

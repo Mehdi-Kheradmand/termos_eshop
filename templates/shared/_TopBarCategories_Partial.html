@@ -1,0 +1,29 @@
+<ul>
+    <li class="level-0 menuItem">
+        <a href="/">
+            <i class="fal fa-home"></i> خانه
+        </a>
+    </li>
+    {% for main_category in category_bar %}
+        <li class="level-0 menuItem">
+        <a href="{% url "module_products:urls_products_list" main_category.slug %}" class="iconUnderMenu">
+            <i class="fal
+                {% if 'Gas' in main_category.slug %}fa-fire
+                {% elif 'electrical' in main_category.slug%}fa-charging-station
+                {% elif 'elements' in main_category.slug%}fa-heat
+                {% elif 'other' in main_category.slug%}fa-cogs
+                {% else %}fa-fire-burner{% endif %}"></i> {{ main_category.title}}
+        </a>
+{#                                 sub menu#}
+        <ul class="sub-menu">
+            {% for sub_menu in main_category.sub_menus %}
+                <li class="level-1 menuItem">
+                    <a href="{% url "module_products:urls_products_list" main_category.slug %}/{{ sub_menu.slug }}">
+                        {{ sub_menu.title }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </li>
+    {% endfor %}
+</ul>

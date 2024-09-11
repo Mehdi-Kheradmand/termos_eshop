@@ -1,0 +1,164 @@
+{% load static %}
+{% load render_partial %}
+
+    <!-- header -->
+    <header class="header">
+        <div class="bottom-page-header">
+
+            <!-- Logo Search Box user and ... -->
+            <div class="container">
+                <div class="page-header">
+                    <div class="d-flex align-items-center">
+                        <!-- logo -->
+                        <div class="logo">
+                            <a href="/">
+                                <img src="{{ site_settings.logo.url }}" class="img-fluid" alt="{{ site_settings.site_title }}">
+                            </a>
+                        </div>
+                        <!-- search -->
+                        <div class="search-box">
+                            <form action="{% url "module_products:urls_products_search_tag" %}" method="get">
+                                <input type="search" id="search-form-text" name="q" class="search-field"
+                                    placeholder="کلید واژه مورد نظر ..."{% if q %} value="{{ q }}"{% endif %}>
+                                <button name="search_btn" id="search_btn" type="submit" class="btn search_btn">جستجو</button>
+                                <i class="fal fa-search"></i>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="top-page-header">
+                        <div class="container">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="top-header-menu">
+                                </div>
+
+                                <!-- name family -->
+                                <div class="user-items">
+                                <!-- name family -->
+
+                                <!-- items -->
+                                <div class="user-item account">
+                                    <a href="{% url "module_profile:urls_profile_view" %}" class="user-login">
+                                        <i class="fal fa-user"></i>
+                                        {% if request.user.is_authenticated %}
+                                            <span id="user_fullname" class="title"></span>
+                                            <script>
+                                                let user_full_name = "{{ request.user.get_full_name }}";
+                                                if (user_full_name.length > 15){
+                                                    document.getElementById("user_fullname").innerHTML = user_full_name.slice(0,15) + '...';
+                                                }else {
+                                                    document.getElementById("user_fullname").innerHTML = user_full_name;
+                                                }
+                                            </script>
+
+                                        {% else %}
+                                            <span class="title">حساب کاربری</span>
+                                        {% endif %}
+                                    </a>
+                                    {% if request.user.is_authenticated %}
+                                        <div class="my-account">
+                                        <ul>
+                                            <li class="account-item">
+                                                <a href="{% url "module_profile:urls_profile_view" %}">حساب کاربری</a>
+                                            </li>
+                                            <li class="account-item">
+                                                <a href="{% url "module_orders:urls_cart" %}">سبد خرید</a>
+                                            </li>
+                                            <li class="account-item">
+                                                <a href="{% url "module_users:urls_Logout" %}">خروج</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <!-- items -->
+
+                                {#--- Partial For cart Button  ---- START#}
+                                {% render_partial 'termos_eshop.views.partial_sidebar_cart_button_view' %}
+                                {#--- Partial For cart Button  ---- End#}
+
+
+                            </div>
+
+
+                                <!-- Sidebar Cart -->
+                                <nav id="offcanvasCart" class="offcanvas offcanvas-cart">
+
+                                    <div class="offcanvas-bar" id="ajax_sidebar_cart">
+                                        {#                  Partial Sidebar                  #}
+                                        {% render_partial 'termos_eshop.views.partial_sidebar_cart_view' %}
+                                    </div>
+
+
+                                </nav>
+                                <div class="offcanvas-overlay"></div>
+                                <!-- Sidebar Cart -->
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="call-number">
+                        <div class="call-number-item">
+                            <strong>12345678</strong>
+                            <span>021</span>
+                            <i class="fal fa-phone"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Logo Search Box user and ... -->
+
+
+
+
+            <!-- Categories --> <!-- Partial -->
+
+            <nav class="menuMain">
+                <div class="container">
+                    {% render_partial 'termos_eshop.views.partial_top_bar_categories_view' %}
+                </div>
+            </nav>
+            <!-- Categories --> <!-- Partial -->
+
+
+
+
+            <!--SIDE BAR -->
+
+            <nav class="sidebar">
+                <div class="nav-header">
+                    <div class="header-cover"></div>
+                    <div class="logo-wrap">
+                        <a class="logo-icon">
+                            <img src="{{ site_settings.logo.url }}" class="img-fluid" alt="{{ site_settings.site_title }}" width="40">
+                        </a>
+                    </div>
+                </div>
+                <ul class="list-top">
+                    <li><a href="{% url "module_contact-us:urls_contact-us_view" %}">تماس باما</a></li>
+                    <li><a href="{% url "module_profile:urls_profile_orders_history" %}">پیگیری سفارش</a></li>
+                </ul>
+
+
+
+
+
+                <!-- Side Bar Categories -->
+                {% render_partial 'termos_eshop.views.partial_side_bar_categories_view' %}
+
+
+            </nav>
+
+            <div class="nav-btn nav-slider">
+                <span class="linee1"></span>
+                <span class="linee2"></span>
+                <span class="linee3"></span>
+            </div>
+            <div class="overlay"></div>
+        </div>
+
+
+    </header>
+{#    <div class="overlay-search-box"></div>#}

@@ -1,0 +1,105 @@
+{% extends "shared/MainLayout.html" %}
+{% load static %}
+
+{% block footer_extra_ref %}
+    <script src="{% static "" %}js/plugins/contact_us_ajax.js"></script>
+{% endblock %}
+
+{% block content %}
+   <!-- content -->
+    <main class="content">
+        <div class="container">
+            <div class="contact-us">
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-xs-12">
+                        <div class="contact-right">
+                            <h1>تماس با ما</h1>
+                            <div class="contact-item">
+                                <i class="fal fa-envelope"></i>
+                                <h4>پست الکترونیک
+                                    <span>{{ site_settings.email }}</span>
+                                </h4>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fal fa-phone"></i>
+                                <h4>شماره تماس
+                                    <span>{{ site_settings.pre_phone }}{{ site_settings.phone }}</span>
+                                </h4>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fal fa-map"></i>
+                                <h4>آدرس
+                                    <span>{{ site_settings.address }}</span>
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-9 col-md-9 col-xs-12">
+
+
+
+
+
+
+
+
+
+
+
+                        <div class="contact-left">
+                            {% csrf_token %}
+
+                            <div class="contact-item">
+                                <label for="form_name" id="form_name_label">{{ contact_us_form.name.label }}</label>
+                                <br>
+                                {{ contact_us_form.name }}
+                            </div>
+
+                            <div class="contact-item">
+                                <label for="form_email" id="form_email_label">{{ contact_us_form.email.label }}</label>
+                                <br>
+                                {{ contact_us_form.email }}
+                            </div>
+
+                            <div class="contact-item">
+                                <label for="form_title" id="form_title_label">{{ contact_us_form.title.label }}</label>
+                                <br>
+                                {{ contact_us_form.title }}
+                            </div>
+
+                            <div class="contact-item">
+                                <label for="form_message" id="form_message_label">{{ contact_us_form.message.label }}</label>
+                                <br>
+                                {{ contact_us_form.message }}
+                            </div>
+
+                            <div class="contact-item">
+                                <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+                                <br>
+                                <span id="captcha-info"> عبارت امنیتی :</span>
+                                <div class="g-recaptcha" data-sitekey="{{ GOOGLE_SITE_KEY }}"></div>
+                                <br>
+                            </div>
+
+                            <div class="contact-item">
+                                <button type="button" id="send-btn" name="send-btn" class="btn btn-dark send-contact row-form-errors">ارسال</button>
+                                <span id="success_alert" class="h6 alert-success font-weight-bold"></span>
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- content -->
+{% endblock %}

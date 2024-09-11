@@ -1,0 +1,50 @@
+{% load static %}
+
+<div class="products">
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="Most-visited" role="tabpanel"
+            aria-labelledby="Most-visited-tab">
+            {% csrf_token %}
+            {#  توی لیست ویو ها خودش این page-obj رو داره که به تعداد صفحه بندی شده محصولات رو نمایش بده  #}
+            {% for product in page_obj %}
+                <div class="col-lg-3 col-md-4 col-xs-12 fr">
+                <div class="product-card">
+                    <div class="product-image-area">
+                        <a href="/products/detail/{{ product.id }}/{{ product.get_slug}}" class="product-image">
+{#                            <div class="product-label">#}
+{#                                <span>3%</span>#}
+{#                            </div>#}
+                            <img src="{{ product.main_small_image.url }}" alt="product">
+                        </a>
+                    </div>
+                    <div class="product-detail-area">
+                        <div class="price">
+{#                            <del>#}
+{#                                <span class="price-amount">71,000,000#}
+{#                                    <span class="price-currencySymbol">تومان</span>#}
+{#                                </span>#}
+{#                            </del>#}
+                            <ins>
+                                <span class="price-amount">{{ product.get_price_with_comma }}
+                                    <span class="price-currencySymbol">تومان</span>
+                                </span>
+                            </ins>
+                        </div>
+                        <h3 class="product-name">
+                            <a href="/products/detail/{{ product.id }}/{{ product.get_slug}}">{{ product.title }}</a>
+                        </h3>
+                        <div class="actions">
+                            {% include "shared/_AddToCardAndWishListBox.html" with the_product=product %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            <!-- txt plp -->
+            <!-- txt plp -->
+        </div>
+
+    <!-- txt fades -->
+    <!-- txt fades -->
+    </div>
+</div>

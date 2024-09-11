@@ -1,0 +1,223 @@
+<div class="row" id="cart_products_flex">
+    <div class="col-lg-9 col-md-9 col-xs-12">
+        <form action="#" class="woocommerce-cart-form">
+            <table id="style-1" class="table table-responsive woocommerce-cart-form-contents">
+                <thead class="thead-light">
+                    <tr>
+                        <th class="product-remove">&nbsp;</th>
+                        <th class="product-thumbnail">&nbsp;</th>
+                        <th class="product-name">محصول</th>
+                        <th class="product-price">قیمت</th>
+                        <th class="product-quantity">تعداد</th>
+                        <th class="product-subtotal"> قیمت کل </th>
+                    </tr>
+                </thead>
+
+
+                <!-- cart_products -->
+                <tbody>
+                    {% if main_order_cart %}
+                        {# User is logged in so show the main_order_cart(from DB) #}
+                        {% for cart_product in main_order_cart.order_detail_model_set.all %}
+                            <tr class="woocommerce-cart-form-cart-item cart-item">
+                                <td class="product-remove">
+                                    <a onclick="ajax_cart_delete_product({{ cart_product.product.id }})" id="remove_link_{{ cart_product.product.id }}" href="#" class="remove">×</a>
+                                </td>
+
+
+                                <td class="product-thumbnail">
+                                    <a href="{% url "module_products:urls_product_detail" cart_product.product.id cart_product.product.get_slug %}">
+                                        <img src="{{ cart_product.product.main_small_image.url }}" alt="product" width="185" height="185">
+                                    </a>
+                                </td>
+                                <td class="product-name">
+                                    <a href="{% url "module_products:urls_product_detail" cart_product.product.id cart_product.product.get_slug %}">
+                                        {{ cart_product.product.title }}
+                                    </a>
+                                    <span class="lead-time el-ready">
+                                        <i class="fal fa-truck-loading"></i>
+                                        آماده ارسال
+                                    </span>
+                                </td>
+                                <td class="product-price">
+                                    <span id="single_price{{ cart_product.product.id }}" class="price text-primary">{{ cart_product.get_price_with_comma }}
+                                        <span class="amount text-secondary">تومان</span>
+                                    </span>
+                                </td>
+
+                                <td class="product-quantity">
+                                    <div class="required-number before">
+                                        <div class="quantity">
+                                            <input name="input_p_num" onchange="product_amount_change(this.id)" id="{{ cart_product.product.id }}" type="number" min="1" max="{{ cart_product.product.stock }}" step="1" value="{{ cart_product.count }}" disabled>
+                                            <div class="quantity-nav">
+                                                <div class="quantity-button quantity-up">+</div>
+                                                <div class="quantity-button quantity-down">-</div>
+                                            </div>
+                                            <div class="quantity-nav">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+
+
+                                <td class="product-subtotal">
+                                    <span id="total_price{{ cart_product.product.id }}" class="price text-primary">{{ cart_product.total_price_with_comma }}
+                                        <span class="amount text-secondary">تومان</span>
+                                    </span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        {# show the session_cart_items #}
+                        {% for cart_product in session_cart_items.products_list %}
+                            <tr class="woocommerce-cart-form-cart-item cart-item">
+                                <td class="product-remove">
+                                    <a onclick="ajax_cart_delete_product({{ cart_product.id }})" id="remove_link_{{ cart_product.id }}" href="#" class="remove">×</a>
+                                </td>
+
+
+                                <td class="product-thumbnail">
+                                    <a href="{% url "module_products:urls_product_detail" cart_product.id cart_product.get_slug %}">
+                                        <img src="{{ cart_product.main_small_image.url }}" alt="product" width="185" height="185">
+                                    </a>
+                                </td>
+                                <td class="product-name">
+                                    <a href="{% url "module_products:urls_product_detail" cart_product.id cart_product.get_slug %}">
+                                        {{ cart_product.title }}
+                                    </a>
+                                    <span class="lead-time el-ready">
+                                        <i class="fal fa-truck-loading"></i>
+                                        آماده ارسال
+                                    </span>
+                                </td>
+                                <td class="product-price">
+                                    <span id="single_price{{ cart_product.id }}" class="price text-primary">{{ cart_product.get_price_with_comma }}
+                                        <span class="amount text-secondary">تومان</span>
+                                    </span>
+                                </td>
+
+                                <td class="product-quantity">
+                                    <div class="required-number before">
+                                        <div class="quantity">
+
+                                            {% for num in session_cart_items.products_count_list %}
+                                                {% if forloop.counter0 == forloop.parentloop.counter0 %}
+                                                    <input name="input_p_num" onchange="product_amount_change(this.id)" id="{{ cart_product.id }}" type="number" min="1" max="{{ cart_product.stock }}" step="1" value="{{ num }}" disabled>
+                                                {% endif %}
+                                            {% endfor %}
+
+                                            <div class="quantity-nav">
+                                                <div class="quantity-button quantity-up">+</div>
+                                                <div class="quantity-button quantity-down">-</div>
+                                            </div>
+                                            <div class="quantity-nav">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+
+
+                                <td class="product-subtotal">
+                                    {% for total_price_cross in session_cart_items.products_total_prices_list %}
+                                        {% if forloop.counter0 == forloop.parentloop.counter0 %}
+                                            <span id="total_price{{ cart_product.id }}" class="price text-primary">{{ total_price_cross }}
+                                        {% endif %}
+                                    {% endfor %}
+                                        <span class="amount text-secondary">تومان</span>
+                                    </span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+
+
+                <!-- cart_products -->
+
+            </table>
+            <div class="coupon">
+                <label for="coupon-code">کوپن:</label>
+                <input type="text" name="coupon_code" class="coupon-code" placeholder="كد تخفیف:">
+                <button type="button" class="apply-coupon">اعمال تخفیف</button>
+            </div>
+        </form>
+    </div>
+    <div class="col-lg-3 col-md-3 col-xs-12">
+        <div class="cart-collaterals">
+            <div class="col-colla">
+                <div class="cart-totals">
+                    <h2>مجموع کل سبد خرید</h2>
+                    <table class="shop-table table mb-3">
+                        <tbody>
+                            <tr class="cart-subtotal">
+                                <th> مجموع سبد خرید </th>
+                                <td>
+                                    <span id="cart_price" class="price">
+                                        {% if main_order_cart %}
+                                            {{ main_order_cart.get_total_price_with_comma }}
+                                        {% else %}
+                                            {{ session_cart_items.total_cart_price_with_comma }}
+                                        {% endif %}
+                                        <span class="amount">تومان</span>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr  class="cart-subtotal">
+                                <th>
+                                    <p class="cart-subtotal">
+                                    هزینه ارسال
+                                    </p>
+                                </th>
+                                <td id="transport">
+                                    {% if main_order_cart %}
+                                        {% if site_settings.transport_limit %}
+                                            {% if main_order_cart.get_total_price >= site_settings.get_transport_limit_price %}
+                                                رایگان
+                                            {% else %}
+                                                {{ site_settings.get_transport_price_with_comma }} تومان
+                                            {% endif %}
+                                        {% else %}
+                                            {# Disabled means all of consignments have to pay the shipping-cost (transport_price) #}
+                                            {{ site_settings.get_transport_price_with_comma }} تومان
+                                        {% endif %}
+                                    {% else %}
+                                        {# check the transport price in sessions #}
+                                        {% if site_settings.transport_limit %}
+                                            {% if session_cart_items.get_total_price >= site_settings.get_transport_limit_price %}
+                                                رایگان
+                                            {% else %}
+                                                {{ site_settings.get_transport_price_with_comma }} تومان
+                                            {% endif %}
+                                        {% else %}
+                                            {# Disabled means all of consignments have to pay the shipping-cost (transport_price) #}
+                                            {{ site_settings.get_transport_price_with_comma }} تومان
+                                        {% endif %}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr class="order-total">
+                                <th><b>
+                                    قیمت نهایی
+                                </b></th>
+                                <td>
+                                    <span id="final_price" class="price"><b>
+                                        {% if main_order_cart %}
+                                            {{ main_order_cart.get_final_price_to_pay_with_comma }}
+                                        {% else %}
+                                            {{ session_cart_items.get_final_price_to_pay_with_comma }}
+                                        {% endif %}
+                                    </b>
+                                        <span class="amount">تومان</span>
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="proceed-to-checkout">
+                        <a href="{% url "module_orders:urls_checkout" %}" class="checkout">تکمیل سفارش</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

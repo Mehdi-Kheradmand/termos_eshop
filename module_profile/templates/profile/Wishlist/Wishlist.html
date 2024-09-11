@@ -1,0 +1,28 @@
+{% extends "shared/_ProfileMainLayout.html" %}
+{% load static %}
+
+{% block extrajs %}
+    <script src="{% static "" %}js/plugins/ajax_add_to_favorites_and_cart.js"></script>
+{% endblock %}
+
+{% block row %}
+
+    {% csrf_token %}
+
+
+        <div class="row">
+
+            <div class="widget">
+                <div class="widget-title">
+                    لیست علاقه مندی ها
+                </div>
+            </div>
+        </div>
+
+        <div class="row wishlist" id="wishlist_items_row">
+            {% include "profile/Wishlist/wishlist_items.html" with  wish_list=wish_list %}
+        </div>
+
+
+
+{% endblock %}

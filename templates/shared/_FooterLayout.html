@@ -1,0 +1,244 @@
+{% load static %}
+<!-- footer -->
+    <footer class="main-footer">
+        <div class="footer-wrap">
+            <div class="footer-top-svg">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1351 48">
+                    <path d="M0,8s101.773,23.5,357,3C479.634,1.15,645.1.159,789.994,16.234,924.514,31.158,1042.19,12.008,1084,8c156.39-14.994,267,0,267,0V50H0V8Z"></path>
+                </svg>
+            </div>
+
+
+           <!-- BOXES ---------------------------------------------------------- -->
+
+            <div class="boxed-service">
+
+                <div class="col-md-3 col-sm-6 col-xs-12 mb-4">
+                    <div class="service-item">
+                        <div class="service-icon">
+                            <img src="{% static "" %}images/service/price-tag-1.png" alt="service">
+                        </div>
+                        <div class="service-content">
+                            <h4>بهترین قیمت</h4>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6 col-xs-12 mb-4">
+                    <div class="service-item">
+                        <div class="service-icon">
+                            <img src="{% static "" %}images/service/delivery-truck-3.png" alt="service">
+                        </div>
+                        <div class="service-content">
+                            <h4>ضمانت سلامت کالا</h4>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6 col-xs-12 mb-4">
+                    <div class="service-item">
+                        <div class="service-icon">
+                            <img src="{% static "" %}images/service/box.png" alt="service">
+                        </div>
+                        <div class="service-content">
+                            <h4>ارسال محصول مطابق تصویر</h4>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6 col-xs-12 mb-4">
+                    <div class="service-item">
+                        <div class="service-icon">
+                            <img src="{% static "" %}images/service/delivery-truck-3.png" alt="service">
+                        </div>
+                        <div class="service-content">
+                            <h4>ارسال رایگان خرید های بیش از  {{ site_settings.get_transport_limit_price_with_comma }} تومان</h4>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+           <!-- BOXES ---------------------------------------------------------- -->
+
+            <div class="footer-gap-default container">
+
+
+                <div class="col-md-3 col-sm-6 col-xs-6 fr">
+                    <div class="footer-list">
+                        <div class="title-list">اطلاعات</div>
+                        <ul>
+                            <li class="list-item">
+                                <i class="fal fa-at"></i>
+                                <a href="mailto:{{ site_settings.email }}">{{ site_settings.email }}</a>
+                            </li>
+
+                            <li class="list-item">
+                                <i class="fal fa-phone-volume"></i>
+                                <a>{{ site_settings.phone }}
+                                {{ site_settings.pre_phone }}</a>
+                            </li>
+
+                            <li class="list-item">
+                                <i class="fal fa-map-marked-alt"></i>
+                                <a>{{ site_settings.address }}</a>
+                            </li>
+
+
+                            <li class="contact-item list-item">
+                                <i class="fal fa-info"></i>
+                                <a href="{% url "urls_about_us" %}">درباره ترموس</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+
+
+
+                <div class="col-md-2 col-sm-6 col-xs-6 fr">
+                    <div class="footer-list">
+                        <div class="title-list">ترموس</div>
+                        <ul>
+                            <li class="list-item">
+                                <i class="fal fa-home"></i>
+                                <a href="/">صفحه اصلی</a>
+                            </li>
+                            <li class="list-item">
+                                <i class="fal fa-book"></i>
+                                <a href="{% url "urls_terms" %}">شرایط و قوانین فروشگاه</a>
+                            </li>
+                            <li class="contact-item list-item">
+                                <i class="fal fa-envelope-open"></i>
+                                <a href="{% url "module_contact-us:urls_contact-us_view" %}">تماس با ما</a>
+                            </li>
+                            <li class="contact-item list-item">
+                                <i class="fal fa-info"></i>
+                                <a href="{% url "urls_about_us" %}">درباره ترموس</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+
+
+
+
+
+                <div class="col-md-2 col-sm-6 col-xs-6 fr">
+                    <div class="footer-list">
+                        <div class="title-list">حساب کاربری</div>
+                        <ul>
+                            <li class="list-item">
+                                <a href="{% url "module_profile:urls_profile_view" %}">حساب من</a>
+                            </li>
+                            <li class="list-item">
+                                <a href="{% url "module_users:urls_Login_Page" %}">ورود | ثبت نام</a>
+                            </li>
+                            <li class="list-item">
+                                <a href="{% url "module_profile:urls_profile_orders_history" %}">تاریخچه سفارشات</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+
+
+
+
+
+                <!-- Follow US -->
+                <div class="col-md-3 col-sm-6 col-xs-6 fr">
+                    <div class="footer-list">
+                        <div class="title-list">ما را دنبال کنید</div>
+                        <ul>
+                            <li class="list-item">
+                                <a href="#"><i class="fab fa-instagram h5"></i> termos_eshop </a>
+                            </li>
+                            <li class="list-item">
+                                <a href="#"><i class="fab fa-telegram h5"></i> termos_eshop </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+
+
+                <div class="col-md-2 col-sm-6 col-xs-6 fr">
+                    <div class="footer-list">
+                        <div class="title-list">نماد‌ها: (برای سنجش اعتبار به صفحه
+                            <a href="{% url "urls_about_us" %}">درباره ترموس</a>
+                            مراجعه فرمایید)</div>
+                        <ul>
+                            <li class="list-item">
+                                <hr>
+                                <!-- Enamad -->
+                                <a referrerpolicy="origin" href="{% url "urls_about_us" %}">
+                                    <img referrerpolicy="origin" src="{% static "" %}images/verifications/enamad100.png" alt="نمادها">
+                                    <img referrerpolicy="origin" src="{% static "" %}images/verifications/zarinpal100.png" alt="نمادها">
+                                </a>
+
+                                <!-- namadha -->
+
+
+{#                                <a referrerpolicy="origin" target="_blank" href="https://trustseal.enamad.ir/?id=287961&amp;Code=Z425pazUZiyyZXhAYALp">#}
+{#                                    <img referrerpolicy="origin" src="https://Trustseal.eNamad.ir/logo.aspx?id=287961&amp;Code=Z425pazUZiyyZXhAYALp" alt="" style="cursor:pointer" id="Z425pazUZiyyZXhAYALp">#}
+{#                                    <img referrerpolicy="origin" src="{% static "" %}images/verifications/namadha.png" alt="" style="cursor:pointer" id="Z425pazUZiyyZXhAYALp">#}
+{#                                </a>#}
+
+                                <!-- Zarinpal -->
+{#                                <script src="https://www.zarinpal.com/webservice/TrustCode" type="text/javascript"></script>#}
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+
+
+
+{#                <div class="col-md-2 col-sm-6 col-xs-6 fr">#}
+{#                    <div class="license">#}
+{#                        <div class="license-images">#}
+{#                            <ul>#}
+{#                                <li class="license-item">#}
+{##}
+{#                                    <!-- Enamad -->#}
+{#                                    <a referrerpolicy="origin" target="_blank" href="https://trustseal.enamad.ir/?id=287961&amp;Code=Z425pazUZiyyZXhAYALp">#}
+{#                                        <img referrerpolicy="origin" src="https://Trustseal.eNamad.ir/logo.aspx?id=287961&amp;Code=Z425pazUZiyyZXhAYALp" alt="" style="cursor:pointer" id="Z425pazUZiyyZXhAYALp">#}
+{#                                    </a>#}
+{##}
+{#                                    <!-- Zarinpal -->#}
+{#                                    <script src="https://www.zarinpal.com/webservice/TrustCode" type="text/javascript"></script>#}
+{#                                </li>#}
+{#                            </ul>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+
+
+            </div>
+        </div>
+    </footer>
+    <!-- footer -->
+
+{# --------------------------------------------------------------------------------------------------------#}
+{# --------------------------------------------------------------------------------------------------------#}
+
+    <div class="container copyright">
+            <div class="col-6">
+                <p class="text-right">© کلیه حقوق این وب سایت متعلق به ترموس است.</p>
+            </div>
+            <div class="col-6">
+                <p class="text-left" dir="ltr">© Copyright 2022 - 2023 termos.ir V.1.1</p>
+            </div>
+    </div>
+{##}

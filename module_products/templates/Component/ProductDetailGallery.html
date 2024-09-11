@@ -1,0 +1,137 @@
+{% load static %}
+<div class="product-gallery">
+    <div class="gallery">
+
+        <div class="gallery-item">
+            <div class="products-gallery">
+
+                <div class="swiper-container gallery-slider pb-md-0 pb-3">
+
+
+                    <!-- Gallery Big Sizes -->
+                    <div class="swiper-wrapper">
+
+
+                        <div class="swiper-slide">
+                            <a href="{{ product.main_big_image.url }}"
+                                class="image-popup-vertical-fit">
+                                <img src="{{ product.main_big_image.url }}"
+                                    data-large="{{ product.main_big_image.url }}" alt="{{ product.title }}">
+                            </a>
+                        </div>
+
+                        {% for product_image in product_gallery %}
+                            <div class="swiper-slide">
+                                <a href="{{ product_image.big_image.url }}"
+                                    class="image-popup-vertical-fit">
+                                    <img src="{{ product_image.big_image.url }}"
+                                        data-large="{{ product_image.big_image.url }}" alt="{{ product_image.product.title }}">
+                                </a>
+                            </div>
+                        {% endfor %}
+
+                    </div>
+                    <!-- Gallery Big Sizes -->
+
+
+
+                    <!-- Add Pagination -->
+                    <div class="swiper-pagination d-md-none"></div>
+                    <!-- Tools on Gallery -->
+                    <div class="product-tools">
+                        <ul>
+                            <li class="tools-item popup-image">
+                                <a href="{{ product.main_big_image.url }}"
+                                    class="image-popup-vertical-fit">
+                                    <i class="fal fa-search"></i>
+                                </a>
+                            </li>
+                            <li class="tools-item popup-alarm">
+                                <a href="#" data-toggle="modal" data-target="#option-alarm">
+                                    <i class="fal fa-bell"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+
+                </div>
+
+
+                <!-- Gallery Small Size at The bottom -->
+                <div class="swiper-container gallery-slider-thumbs mt-2 d-md-block d-none">
+                    <div class="swiper-wrapper">
+
+
+
+                        <div class="swiper-slide">
+                            <img src="{{ product.main_small_image.url }}"
+                                alt="{{ product_image.product.title }}">
+                        </div>
+
+                        {% for product_image in product_gallery %}
+                            <div class="swiper-slide">
+                                <img src="{{ product_image.small_image.url }}"
+                                    alt="{{ product_image.product.title }}">
+                            </div>
+                        {% endfor %}
+
+
+
+                    </div>
+                <!-- Gallery Small Size at The bottom -->
+
+
+
+                    <!-- Add Arrows -->
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Modal-option-alarm -->
+        <div class="modal fade" id="option-alarm" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalCenterTitle">به من اطلاع بده
+                        </h5>
+                        <button type="button" class="close p-0 m-0" data-dismiss="modal"
+                            aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-notification-title">از طریق:
+                        </div>
+                        <div class="form-auth-row">
+                            <label for="#" class="ui-checkbox mt-1">
+                                <input type="checkbox" value="1" name="login" id="remember">
+                                <span class="ui-checkbox-check"></span>
+                            </label>
+                            <label for="remember" class="remember-me mr-0">ایمیل به
+                                {{ request.user.email }}</label>
+                        </div>
+                        <div class="form-auth-row">
+                            <label for="#" class="ui-checkbox mt-1">
+                                <input type="checkbox" value="1" name="login" id="remember">
+                                <span class="ui-checkbox-check"></span>
+                            </label>
+                            <label for="remember" class="remember-me mr-0">پیامک به
+                                {{ request.user.useradditional.Phone }}</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary ml-2">ثبت</button>
+                        <button type="button" class="btn btn-danger"
+                            data-dismiss="modal">بازگشت</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

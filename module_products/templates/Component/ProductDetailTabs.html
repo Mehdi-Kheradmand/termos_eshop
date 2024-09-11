@@ -1,0 +1,183 @@
+{% load static %}
+<div class="tabs">
+    <div class="tab-box">
+        <ul class="tab nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item description">
+                <a class="nav-link active" id="des-tab" data-toggle="tab" href="#des" role="tab"
+                    aria-controls="des" aria-selected="true">
+                    توضیحات
+                </a>
+            </li>
+            <li class="nav-item comment-user">
+                <a class="nav-link" id="user-tab" data-toggle="tab" href="#user" role="tab"
+                    aria-controls="user" aria-selected="true">
+                    نظرات کاربران
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="tabs-content">
+        <div class="tab-content" id="myTabContent">
+            <!-- Description -->
+            <div class="tab-pane fade show active" id="des" role="tabpanel"
+                aria-labelledby="des-tab">
+                <div class="content-heading">
+                    <i class="fal fa-pen-alt"></i>
+                    <div class="heading">
+                        <span class="title">توضیحات محصول</span>
+                        <span class="desc">{{ product.title }}</span>
+                    </div>
+                </div>
+                <div class="entry-content-inner content-expert-summary">
+                    <div class="mask pm-3">
+                        <div class="mask-text">
+                            {% for line in product.split_description %}
+                                <p>{{ line }}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <!-- Tags -->
+                <hr>
+                <div class="content-heading">
+                    <i class="fal"></i>
+                    <div class="heading">
+                        <span class="title">برچسب ها</span>
+                    </div>
+                </div>
+                <div class="entry-content-inner content-expert-summary">
+                    <div class="mask pm-3">
+                        <div class="mask-text">
+                            <p>{% for Tag in product.tagsmodel_set.all %}
+                                <a href="{% url "module_products:urls_products_search_tag" %}?q={{ Tag.title }}">{{ Tag.title }}</a>
+                            {% endfor %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- Comments -->
+            <div class="tab-pane fade" id="user" role="tabpanel" aria-labelledby="user-tab">
+
+                <div class="content-heading">
+                    <i class="fal fa-comment-alt-lines"></i>
+                    <div class="heading">
+                        <span class="title">نظرات کاربران</span>
+                        <span class="desc">{{ product.title }}</span>
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-lg-3 col-xs-3"></div>
+                    <div class="col-lg-6 col-xs-6">
+                        <span class="comment-reply-title">دیدگاه خود را بنویسید </span>
+                        <form action="rating" class="comment-form">
+                            <div class="comment-form-rating">
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12 mt-3">
+                                    <div class="comment-form-comment">
+                                        <label for="comment-box">
+                                        {% if request.user.is_authenticated %}دیدگاه شما<span class="required"> * </span>{% endif %}
+                                            {% if not request.user.is_authenticated %}
+                                                <div class="col-12 mt-3">
+                                                    <span class="alert-info">برای ثبت دیدگاه ابتدا وارد شوید</span>
+                                                </div>
+                                                <div class="col-12 mt-3">
+                                                    <a href="{% url "module_users:urls_Login_Page" %}?next=/products/detail/{{ the_product.id }}/{{ the_product.get_slug }}">
+                                                    <button type="button" class="btn btn-dark record" > ورود / ثبت نام</button>
+                                                    </a>
+                                                </div>
+                                            {% endif %}
+                                            <span id="comment_added" class="alert-success"></span>
+                                            <span id="comment-alert" class="alert-warning"></span>
+                                        </label>
+                                        {% if request.user.is_authenticated %}
+                                            {{ comment_form.msg }}
+                                            <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+                                            <br>
+                                            <label> عبارت امنیتی :</label>
+                                            <div class="g-recaptcha" data-sitekey="{{ GOOGLE_SITE_KEY }}"></div>
+
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                {% if request.user.is_authenticated %}
+                                    <div class="col-12 mt-3">
+                                        <button type="button" name="submit-comment" id="submit-comment" class="btn btn-dark record">ثبت</button>
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                        </form>
+                    </div>
+                    <div class="col-lg-3 col-xs-3"></div>
+
+                </div>
+                <div class="comment-override">
+                    <h2 class="reviews-title">{{ product_comments.count }} دیدگاه برای
+                        <span>{{ product.title }}</span>
+                    </h2>
+                    <ol class="commentlist" id="comment_list">
+
+
+
+
+
+
+
+
+
+
+
+
+                        {% for p_comment in product_comments %}
+                                <li>
+                                <div class="row">
+
+                                    <div class="col-12 col-sm-9">
+                                        <div class="comment-content">
+                                            <div class="meta">
+                                                توسط
+                                                <strong class="author"> {{ p_comment.owner.first_name }} </strong>
+                                                <span class="dash">در تاریخ </span>
+                                                <time class="published-date">{{ p_comment.created_date }}</time>
+                                                {% if not p_comment.is_accepted %}
+                                                    <span class="alert-warning">منتظر تایید</span>
+                                                {% endif %}
+                                            </div>
+
+                                            <div class="description">
+                                                <p>{{ p_comment.msg }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        {% endfor %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

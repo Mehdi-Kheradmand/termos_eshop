@@ -1,0 +1,109 @@
+{% extends "shared/_ProfileMainLayout.html" %}
+{% load static %}
+
+{% block extrajs %}
+    <script src="{% static "" %}js/plugins/ajax_edit_profile.js"></script>
+{% endblock %}
+
+{% block row %}
+    <div class="row">
+        <div class="col-12">
+            <div class="widget">
+                <div class="widget-content account-edit d-block p-0">
+                    <div class="checkout">
+                        <form action="#" class="checkout-form woocommerce-checkout" >
+                            {% csrf_token %}
+                            <div class="customer-details">
+                                <div class="woocommerce-billing-fields">
+
+                                    <span class="alert-success btn-block h5" id="success_alert"></span>
+                                    <a href="{% url "urls_Home_Page" %}" type="button" id="btn_goto_home" hidden class="btn-sm btn-info">صفحه‌اصلی‌فروشگاه</a>
+                                    <a href="{% url "module_profile:urls_profile_view" %}" id="btn_goto_dashboard" hidden type="button" class="btn-sm btn-info">پنل کاربری</a>
+
+                                    <h3>ویرایش حساب کاربری </h3>
+                                    <div class="woocommerce-billing-fields-field-wrapper">
+                                        <!-- item -->
+                                        <div class="form-row form-row-first validate-required">
+                                            <label for="profile-first-name" class="first-name">نام
+                                            </label>
+                                            <label class="text-danger" id="first_name_alert"></label>
+                                            <span class="woocommerce-input-wrapper">
+                                                <input value="{{ request.user.first_name }}" type="text" class="input-first-name" name="profile-first-name" id="profile-first-name">
+                                            </span>
+                                        </div>
+                                        <!-- item -->
+                                        <div class="form-row form-row-first validate-required">
+                                            <label for="profile-last-name" class="last-name">نام خانوادگی
+                                            </label>
+                                            <label class="text-danger" id="last_name_alert"></label>
+                                            <span class="woocommerce-input-wrapper">
+                                                <input value="{{ request.user.last_name }}" type="text" class="profile-last-name" name="billing-last-name" id="profile-last-name">
+                                            </span>
+                                        </div>
+                                        <!-- item -->
+                                        <div class="form-row form-row-first validate-required">
+                                            <label for="profile-email" class="">آدرس ایمیل
+                                            </label>
+                                            <label class="text-danger" id="email_alert"></label>
+                                            <span class="woocommerce-input-wrapper">
+                                                <input value="{{ request.user.email }}" type="text" class="input-billing-email" name="profile-email" id="profile-email" placeholder="vira@gmail.com">
+                                            </span>
+                                        </div>
+                                        <!-- item -->
+                                        <br>
+                                        <!-- item -->
+                                        <div class="form-row form-row-first validate-required">
+                                            <label for="profile-new-password">رمز عبور جدید (اختیاری)
+                                            </label>
+                                            <label class="text-danger" id="new_password_alert"></label>
+                                            <span class="woocommerce-input-wrapper">
+                                                <input type="text" class="input-billing-password" name="profile-new-password" id="profile-new-password" placeholder="در صورت نیاز به تغییر، رمز‌عبور جدید را وارد‌نمایید">
+                                            </span>
+                                        </div>
+                                        <!-- item -->
+                                        <div class="form-row form-row-first validate-required">
+                                            <label for="profile-phone" class="">موبایل</label>
+                                            <label class="text-danger" id="phone_alert"></label>
+                                            <span class="woocommerce-input-wrapper">
+                                                <input value="{{ request.user.useradditional.Phone }}" type="text" class="input-billing-phone" maxlength="11" minlength="11" name="profile-phone" id="profile-phone" placeholder="*********09">
+                                            </span>
+                                        </div>
+
+                                        <br>
+                                        <br>
+
+
+                                        <div class="form-row form-row-first validate-required">
+                                            <label for="phone_verify_code_input" id="phone_verify_label" class="text-dark font-weight-bold" hidden >
+                                                برای تایید و ذخیره، کد ارسال شده به موبایل خود را وارد نمایید
+                                            </label>
+                                            <label class="text-danger" id="phone_verify_alert"></label>
+                                            <span class="woocommerce-input-wrapper input-group-sm">
+                                                <input type="text" maxlength="6" hidden class="input-billing-phone inline-group" name="phone_verify_code_input" id="phone_verify_code_input" placeholder="کد تایید" style="width: 50%;">
+                                                {# Timer #}
+
+                                                <div class="d-inline-flex" id="timer_element">
+                                                    <div class="form-account-row">
+                                                        <div class="receive-verify-code">
+                                                            <p id="countdown-verify-end"></p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </span>
+                                        </div>
+
+
+                                        <button type="button" class="mt-3 btn btn-info save-account" id="save-account-details" name="save-account-details">بررسی اطلاعات</button>
+                                        <button type="button" onclick="reload_page()" hidden class="mt-3 btn btn-dark save-account" id="btn_reload" name="btn_reload">ویرایش دوباره مشخصات</button>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

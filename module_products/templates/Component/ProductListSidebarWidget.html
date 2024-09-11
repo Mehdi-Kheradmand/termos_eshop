@@ -1,0 +1,49 @@
+{% load static %}
+<div class="col-lg-3 sticky-sidebar">
+    <div class="sidebar-widget sidebar-widget-filter">
+    <div class="widget woocommerce widget-price-filter">
+        <div class="widget-title">فیلتر براساس قیمت :</div>
+        <div class="widget-content">
+
+
+
+
+            <!-- 1 -->
+            <form method="get">
+                <div class="mt-5 mb-4">
+                    <div id="slider-non-linear-step"></div>
+                </div>
+                <div class="filter-range mt-2 mb-2">
+                    <div class="mt-2">
+                        <div class="filter-content">
+
+                            {% if filter_view %}
+                                <input type="hidden" id="db_max_price" value="{{ db_max_price }}">
+                                <input type="hidden" id="start_price" value="{{ start_price }}">
+                                <input type="hidden" id="end_price" value="{{ end_price }}">
+                            {% endif %}
+
+
+{#                            <button type="button" onclick="products_filter()" class="btn btn-range applyPriceFilterBtn" id="btn_add_filter">#}
+                            <button type="button" class="btn btn-range applyPriceFilterBtn" id="btn_add_filter">
+                                انجام فیلتر
+                            </button>
+                            <span>قیمت: از</span>
+                            <span class="example-val" id="slider-non-linear-step-value"></span>
+                            تومان
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+
+
+
+
+
+
+        </div>
+    </div>
+
+</div>
+</div>

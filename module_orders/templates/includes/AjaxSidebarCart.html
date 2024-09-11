@@ -1,0 +1,92 @@
+
+<div class="offcanvas-header">
+    <div class="d-flex align-items-center justify-content-between mb-12">
+        {% if request.user.is_authenticated and header_cart %}
+            <strong>سبد خرید
+                <span id="side_cart_count" class="cart-count">{{ header_cart.count }}</span>
+            </strong>
+        {% else %}
+            <strong>سبد خرید
+                <span id="side_cart_count" class="cart-count">0</span>
+            </strong>
+        {% endif %}
+        <div class="cart-sidebar-close close-sidebar" id="offcanvas-dismiss-cart">
+            <i class="fal fa-times"></i>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="offcanvas-shopping-cart-content">
+    <div class="wrapper">
+        <div class="scrollbar" id="style-1">
+            <div class="force-overflow">
+                <div class="offcanvas-body">
+                    <!--  Cart Items  -->
+                    <ul>
+                        <!-- items -->
+                       {% if request.user.is_authenticated and header_cart %}
+                            {% for pd in header_cart %}
+                                <li class="cart-item">
+                                    <span class="d-flex align-items-center mb-2">
+
+
+
+
+
+
+                                            <button type="button" onclick="remove_detail({{ pd.product.id }})" class="remove remove-from-cart-button">
+                                                <i class="fal fa-times"></i>
+                                            </button>
+
+
+
+
+                                        <a href="{% url "module_products:urls_product_detail" pd.product.id pd.product.get_slug %}">
+                                            <img src="{{ pd.product.main_small_image.url }}"
+                                                alt="cart">
+                                        </a>
+
+
+
+                                        <a href="{% url "module_products:urls_product_detail" pd.product.id pd.product.get_slug %}">
+                                            <span class="titleCart">
+                                                {{ pd.product.title }}
+                                            </span>
+                                            <div class="quantityCart">
+                                                {{ pd.count }} ×
+                                                <span class="price">{{ pd.get_price_with_comma }}
+                                                    <span class="amount">تومان</span>
+                                                </span>
+                                            </div>
+                                        </a>
+                                    </span>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+                        <!-- items -->
+                    </ul>
+                    <!--  Cart Items  -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="offcanvas-footer">
+    <div class="mini-cart-total total">
+        <strong>جمع كل سبد خريد:</strong>
+        <span class="price fl">{{ total_cart_price }}
+            <span class="amount">تومان</span>
+        </span>
+    </div>
+    <div class="mini-cart-actions">
+        <a href="{% url "module_orders:urls_cart" %}" class="forward">مشاهده سبد خرید</a>
+        {% if header_cart.count %}
+            <a href="{% url "module_orders:urls_checkout" %}" class="checkout">تسویه حساب</a>
+        {% else %}
+            <button disabled href="#" class="checkout">تسویه حساب</button>
+        {% endif %}
+    </div>
+</div>

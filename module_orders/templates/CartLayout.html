@@ -1,0 +1,24 @@
+{% extends "shared/MainLayout.html" %}
+{% load static %}
+
+{% block content %}
+    <!-- content -->
+    <main class="content">
+        <div class="container">
+            {% include "includes/OrederSteps.html" %}
+
+            {% if main_order_cart or session_cart_items %}
+                {% csrf_token %}
+                {% include "includes/CartWithProducts.html" %}
+            {% else %}
+                {% include "includes/CartEmpty.html" %}
+            {% endif %}
+        </div>
+    </main>
+    <!-- content -->
+
+{% endblock %}
+
+{% block footer_extra_ref %}
+    <script src="{% static "" %}js/plugins/cart_ajax.js"></script>
+{% endblock %}

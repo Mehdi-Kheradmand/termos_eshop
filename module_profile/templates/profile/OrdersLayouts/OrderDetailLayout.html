@@ -1,0 +1,211 @@
+{% extends "shared/_ProfileMainLayout.html" %}
+
+{% block row %}
+    <div class="row">
+        <div class="col-12">
+            <div class="widget">
+                <div class="widget-title">
+                <hr>
+                    <p class="h5">
+                         شماره سفارش :
+                        <span class="h4">{{ main_order.get_id_plus_1000 }}</span>
+                    </p><hr>
+
+
+                <div class="h6 align-content-center">
+                    <span class="h6">وضعیت پرداخت : </span>
+                    {% if main_order.payment_status == 0 %}
+                        <span class="alert-success align-content-center">پرداخت موفق</span>
+                    {% elif main_order.payment_status == 1 %}
+                        <span class="alert-warning align-content-center">ناموفق >>
+                        <a class="btn-info" href="{% url "module_orders:urls_checkout_repay" main_order.id %}"> پرداخت مجدد</a>
+                        </span>
+                    {% elif main_order.payment_status == 2 %}
+                        <span class="alert-info align-content-center">درحال‌بررسی</span>
+                    {% elif main_order.payment_status == 3 %}
+                        <span class="alert-danger align-content-center">لغو شده</span>
+                    {% elif main_order.payment_status == 4 %}
+                        <span class="alert-warning align-content-center">مرجوع شده</span>
+                    {% else %}
+                        <span class="alert-info align-content-center">درحال‌بررسی</span>
+                    {% endif %}
+                </div>
+                <p></p>
+
+                <div class="h6 align-content-center">
+                    <span class="h6">  وضعیت مرسوله : </span>
+                        {% if main_order.package_status == -1 %}
+                            {% if order.error_message %}
+                                <span class="alert-warning align-content-center">{{ order.error_message }}</span>
+                            {% else %}
+                                <span class="alert-warning align-content-center">نامعلوم</span>
+                            {% endif %}
+                        {% elif main_order.package_status == 0 %}
+                            {% if main_order.payment_status == 0 %}
+                                <span class="alert-info align-content-center">درحال‌جمع‌آوری</span>
+                            {% elif main_order.payment_status == 4 %}
+                                <span class="alert-warning align-content-center">درحال‌بررسی</span>
+                            {% endif %}
+                        {% elif main_order.package_status == 1 %}
+                            {% if main_order.payment_status == 0 %}
+                                <span class="alert-info align-content-center">بسته‌بندی‌ شده</span>
+                            {% elif main_order.payment_status == 4 %}
+                                <span class="alert-success align-content-center">هزینه‌برگشت ‌خورده</span>
+                            {% endif %}
+                        {% elif main_order.package_status == 2 %}
+                            {% if main_order.payment_status == 0 %}
+                                <span class="alert-success align-content-center">ارسال شده</span>
+                            {% elif main_order.payment_status == 4 %}
+                                <span class="alert-danger align-content-center">غیر‌قابل‌ قبول</span>
+                            {% endif %}
+                        {% else %}
+                            <span class="alert-warning align-content-center">{{ main_order.package_status }}نامعلوم </span>
+                        {% endif %}
+                </div>
+
+
+                <hr>
+                </div>
+                <div class="widget-content user-detail-orders">
+                    <table class="table review-order-table">
+                        <thead class="thead-light">
+                            <tr>
+                                <th class="product-name">جزییات سفارش</th>
+                                <th class="product-total"> مبلغ </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for detail_order in detail_orders %}
+                                <tr class="cart_item">
+                                    <td class="product-name">
+                                        {{ detail_order.product.title }}
+                                        <strong class="product-quantity">( {{ detail_order.count }} عدد )</strong>
+                                    </td>
+                                    <td class="product-total">
+                                        <span class="price">{{ detail_order.total_price_with_comma }}
+                                            <span class="amount">تومان</span>
+                                        </span>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr class="cart-subtotal">
+                                <th> قیمت کل محصولات </th>
+                                <td>
+                                    <span class="price">{{ main_order.get_total_price_with_comma }}
+                                        <span class="amount">تومان</span>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr class="shipping-totals">
+                                <th>حمل و نقل</th>
+                                {% if main_order.get_transport_value == 0 %}
+                                    <td>رایگان</td>
+                                {% else %}
+                                    <td>{{ main_order.get_transport_value_with_comma }}</td>
+                                {% endif %}
+                            </tr>
+                            <tr class="order-total">
+                                <th> مجموع </th>
+                                <td>
+                                    <span class="price text-info">{{ main_order.get_total_price_plus_transport_with_comma }}
+                                        <span class="amount">تومان</span>
+                                    </span>
+                                </td>
+                            </tr>
+{#                            <tr class="cart-discount">#}
+{#                                <th>تخفیف شما از این خرید</th>#}
+{#                                <td>#}
+{#                                    <span class="price">9,700,000#}
+{#                                        <span class="amount">تومان</span>#}
+{#                                    </span>#}
+{#                                </td>#}
+{#                            </tr>#}
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <div class="widget">
+                <div class="widget-title">
+                    مشخصات سفارش
+                </div>
+                <div class="widget-content user-detail-orders">
+                    <ul class="profile-address-info">
+                        <li>
+                            <div class="profile-address-info-item location">
+                                <span class="title-address">کد پیگیری مرسوله پستی : </span>
+                                {{ main_order.post_tracking }}
+                            </div>
+                        </li>
+                        <li>
+                            <div class="profile-address-info-item email">
+                                <span class="title-address">شناسه پرداخت : </span>
+                                {{ main_order.transaction_id }}
+                            </div>
+                        </li>
+                        <li>
+                            <div class="profile-address-info-item code-post">
+                                <span class="title-address">تاریخ ثبت سفارش : </span>
+                                {{ main_order.payment_date }}
+                            </div>
+                        </li>
+                        <li>
+                            <div class="profile-address-info-item code-post">
+                                <span class="title-address">توضیحات سفارش : </span>
+                                {{ main_order.cart_notes }}
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+
+
+            <div class="widget">
+                <div class="widget-title">
+                    مشخصات گیرنده
+                </div>
+                <div class="widget-content user-detail-orders">
+                    <ul class="profile-address-info">
+                        <li>
+                            <div class="profile-address-info-item location">
+                                <span class="title-address">نام : </span>
+                                {{ main_order.receiver_first_name }} {{ main_order.receiver_last_name }}
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="profile-address-info-item location">
+                                <span class="title-address">آدرس : </span>
+                                {{ main_order.receiver_address }}
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="profile-address-info-item email">
+                                <span class="title-address">ایمیل : </span>
+                                {{ main_order.receiver_email }}
+                            </div>
+                        </li>
+                        <li>
+                            <div class="profile-address-info-item phone">
+                                <span class="title-address">شماره تلفن : </span>
+                                {{ main_order.receiver_phone }}
+                            </div>
+                        </li>
+                        <li>
+                            <div class="profile-address-info-item code-post">
+                                <span class="title-address">کد پستی : </span>
+                                {{ main_order.receiver_postalcode }}
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+{% endblock %}

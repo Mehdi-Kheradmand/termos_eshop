@@ -1,0 +1,68 @@
+{% extends "shared/AccountsMainLayout.html" %}
+{% load static %}
+
+{% block header_extra_ref %}
+    <link rel="stylesheet" href="{% static "" %}css/plugins/noUISlider.min.css">
+    <script src="https://www.google.com/recaptcha/api.js?hl=fa" async defer></script>
+{% endblock %}
+
+{% block content %}
+    <!-- content -->
+    <main class="content mt-3">
+        <div class="container">
+            <div class="my-account-login">
+                <div class="col-lg-4 col-md-5 mx-auto">
+                    <div class="account-box">
+                        <section class="account-login-logo">
+                            <a href="/" id="logo_tag">
+                                <img src="{{ site_settings.logo.url }}" alt="{{ site_settings.site_title }}" class="img-fluid">
+                            </a>
+                        </section>
+{#                        <ul>#}
+{#                            <li class="active">#}
+                                <h6><i class="fal fa-user"></i> ورود | ثبت نام</h6>
+{#                            </li>#}
+{#                            <li>#}
+{#                                <a href="{% url "module_users:urls_Register_Page" %}">#}
+{#                                    <i class="fal fa-sign-in"></i>#}
+{#                                    ثبت نام#}
+{#                                </a>#}
+{#                            </li>#}
+{#                        </ul>#}
+                        <hr>
+                        <div class="login-wrap">
+
+
+
+                            <form action="#" method="post" id="user_flex_form" name="user_flex_form">
+                                {% csrf_token %}
+                                <div id="error_viewer"></div>
+                                <input type="hidden" id="id_input_next_req_addr" value="{{ next_req_addr }}">
+
+                                <label class="small" for="{{ context_form.input_email_phone.auto_id }}">{{ context_form.input_email_phone.label }}</label>
+                                <div class="item-account">
+                                    {{ context_form.input_email_phone }}
+                                </div>
+                                <br>
+                                <div class="action-account">
+                                    <div class="g-recaptcha" data-sitekey="6LdONoYgAAAAADpXdgiCB3AfS-yrL-K4WaMJvUTg"></div>
+                                    <br>
+                                    <button type="button" name="btn_send" id="btn_send" class=" btn loginBtn">ورود به حساب کاربری</button>
+{#                                    <a class="lost" href="#">گذرواژه خود را فراموش کرده اید؟</a>#}
+                                </div>
+                            </form>
+
+
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- content -->
+{% endblock %}
+

@@ -1,0 +1,299 @@
+{% extends "shared/MainLayout.html" %}
+{% load static %}
+
+{% block content %}
+    <!-- content -->
+    <main class="content">
+    <!-- Main Slider -->
+        <div class="container">
+{#            <div class="row d-sm-block">#}
+{#                <div class="col-12">#}
+{#                    <div class="banner">#}
+{#                        <a href="#">#}
+{#                            <img src="{% static "images/banner/banner1.jpg" %}" alt="banner">#}
+{#                        </a>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+            <div class="row mb-3">
+                <div class="col-lg-8">
+                    <div class="main-slider">
+                        <div class="swiper mySwiper mainSlider">
+                            <div class="swiper-wrapper">
+
+                                {% for slide in sliders %}
+                                    <div class="swiper-slide">
+                                    <a href="{{ slide.url_link }}">
+                                        <img src="{{ slide.image.url }}" class="img-fluid"
+                                            alt="sliderMain">
+                                    </a>
+                                </div>
+                                {% endfor %}
+
+                            </div>
+                            <div class="swiper-button-next"></div>
+                            <div class="swiper-button-prev"></div>
+{#                            <div class="swiper-pagination"></div>#}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="row">
+                        <div class="col-lg-12 col-sm-6 col-12">
+                            <div class="banner mb-3">
+                                <a href="{{ site_settings.index_banner1_link }}">
+                                    <img src="{{ site_settings.index_banner1.url }}" alt="{{ site_settings.site_title }}">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 col-sm-6 col-12">
+                            <div class="banner">
+                                <a href="{{ site_settings.index_banner2_link }}">
+                                    <img src="{{ site_settings.index_banner2.url }}" alt="{{ site_settings.site_title }}">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+{#        {% include "includes/index_includes/amazing_slider.html" %}#}
+
+
+        {% csrf_token %}
+
+        <!-- Newest Products and offer -->
+        <div class="container">
+            <div class="row">
+                <!-- Newest Products -->
+                <!-- col9 if you want to add awsome offers or banner -->
+                <div class="col-lg-12">
+                    <section class="product-carousel">
+                        <div class="product-heading">
+                            <div class="title">
+                                <i class="fal fa-layer-plus"></i> جدیـدترین محصـولات
+                            </div>
+                            <a href="{% url "module_products:urls_products_search_tag" %}?sort_order=newest-tab" class="view-more">
+                                <i class="fal fa-angle-left"></i> مشاهده همه
+                            </a>
+                        </div>
+                        <div class="block-content-wrap mt-3">
+
+
+
+                            <div class="swiper mySwiper sliderProduct">
+
+
+
+                                <div class="swiper-wrapper">
+
+                                {% for l_product in last_products %}
+                                    <div class="swiper-slide">
+                                        <div class="item-area item-general">
+                                            <div class="product-image-area">
+                                                <a href="{% url "module_products:urls_product_detail" l_product.id l_product.get_slug %}" class="product-image">
+{#                                                    <div class="product-label">#}
+{#                                                        <span>3%</span>#}
+{#                                                    </div>#}
+                                                    <img src="{{ l_product.main_small_image.url }}"
+                                                        alt="sliderProduct">
+                                                </a>
+                                            </div>
+                                            <div class="product-detail-area">
+                                                <div class="price">
+{#                                                    offer#}
+{#                                                    <del>#}
+{#                                                        <span class="price-amount">71,000,000#}
+{#                                                            <span class="price-currencySymbol">تومان</span>#}
+{#                                                        </span>#}
+{#                                                    </del>#}
+                                                    <ins>
+                                                        <span class="price-amount">{{ l_product.get_price_with_comma }}
+                                                            <span class="price-currencySymbol">تومان</span>
+                                                        </span>
+                                                    </ins>
+                                                </div>
+                                                <h3 class="product-name">
+                                                    <a href="{% url "module_products:urls_product_detail" l_product.id l_product.get_slug %}">{{ l_product.title }}</a>
+                                                </h3>
+                                                <div class="actions">
+                                                    {% include "shared/_AddToCardAndWishListBox.html" with the_product=l_product prefix="last_products" %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+
+                                </div>
+
+
+
+
+                                <div class="swiper-button-next"></div>
+                                <div class="swiper-button-prev"></div>
+                            </div>
+
+
+
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Awsome Offer -->
+                {% include "includes/index_includes/index_awsome_offer_slider.html" %}
+
+
+            </div>
+
+
+            <!-- Category Slider 1 -->
+            <div class="row">
+                <div class="col-12">
+                    <section class="product-carousel">
+                        <div class="col-lg-3 p-0 d-inline-block">
+                            {% if category_slider_1 %}
+                                <a href="{% url "module_products:urls_products_list" category_slider_1.slug %}" class="specials-title">
+                                    {% if category_slider_1.banner %}
+                                        <img src="{{ category_slider_1.banner.url }}" alt="sliderProduct">
+                                    {% else %}
+                                        <img src="{{ site_settings.logo.url }}" alt="sliderProduct">
+                                    {% endif %}
+                                </a>
+                            {% endif %}
+                        </div>
+                        <div class="col-lg-9 col-md-12 col-xs-12 p-0 fl">
+                            <div class="block-content-wrap mt-3">
+                                <div class="swiper mySwiper sliderProduct">
+                                    <div class="swiper-wrapper">
+                                        {% for product in category_slider_1.giveme_products %}
+                                            <div class="swiper-slide">
+                                            <div class="item">
+                                                <div class="item-area item-general">
+                                                    <div class="product-image-area">
+                                                        <a href="{% url "module_products:urls_product_detail" product.id product.get_slug %}" class="product-image">
+            {#                                                    <div class="product-label">#}
+            {#                                                        <span>3%</span>#}
+            {#                                                    </div>#}
+                                                            <img src="{{ product.main_small_image.url }}"
+                                                                alt="sliderProduct">
+                                                        </a>
+                                                    </div>
+                                                    <div class="product-detail-area">
+                                                        <div class="price">
+{#                                                            <del>#}
+{#                                                                <span class="price-amount">71,000,000#}
+{#                                                                    <span class="price-currencySymbol">تومان</span>#}
+{#                                                                </span>#}
+{#                                                            </del>#}
+                                                            <ins>
+                                                                <span class="price-amount">{{ product.get_price_with_comma }}
+                                                                    <span class="price-currencySymbol">تومان</span>
+                                                                </span>
+                                                            </ins>
+                                                        </div>
+                                                        <h3 class="product-name">
+                                                            <a href="{% url "module_products:urls_product_detail" product.id product.get_slug %}">{{ product.title }}</a>
+                                                        </h3>
+                                                        <div class="actions">
+                                                            {% include "shared/_AddToCardAndWishListBox.html" with the_product=product prefix="slider1" %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="swiper-button-next"></div>
+                                    <div class="swiper-button-prev"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+
+            <!-- Category Slider 2 -->
+            <div class="row">
+                <div class="col-12">
+                    <section class="product-carousel">
+                        <div class="col-lg-3 p-0 d-inline-block text-left">
+                            {% if category_slider_2 %}
+                                <a href="{% url "module_products:urls_products_list" category_slider_2.slug %}" class="specials-title">
+                                    {% if category_slider_2.banner %}
+                                        <img src="{{ category_slider_2.banner.url }}" alt="sliderProduct">
+                                    {% else %}
+                                        <img src="{{ site_settings.logo.url }}" alt="sliderProduct">
+                                    {% endif %}
+                                </a>
+                            {% endif %}
+                        </div>
+                        <div class="col-lg-9 p-0 fr">
+                            <div class="block-content-wrap mt-3">
+                                <div class="swiper mySwiper sliderProduct">
+                                    <div class="swiper-wrapper">
+                                        {% for product in category_slider_2.giveme_products %}
+                                            <div class="swiper-slide">
+                                            <div class="item">
+                                                <div class="item-area item-general">
+                                                    <div class="product-image-area">
+                                                        <a href="{% url "module_products:urls_product_detail" product.id product.get_slug %}" class="product-image">
+        {#                                                    <div class="product-label">#}
+        {#                                                        <span>3%</span>#}
+        {#                                                    </div>#}
+                                                            <img src="{{ product.main_small_image.url }}"
+                                                                alt="sliderProduct">
+                                                        </a>
+                                                    </div>
+                                                    <div class="product-detail-area">
+                                                        <div class="price">
+{#                                                            <del>#}
+{#                                                                <span class="price-amount">71,000,000#}
+{#                                                                    <span class="price-currencySymbol">تومان</span>#}
+{#                                                                </span>#}
+{#                                                            </del>#}
+                                                            <ins>
+                                                                <span class="price-amount">{{ product.get_price_with_comma }}
+                                                                    <span class="price-currencySymbol">تومان</span>
+                                                                </span>
+                                                            </ins>
+                                                        </div>
+                                                        <h3 class="product-name">
+                                                            <a href="{% url "module_products:urls_product_detail" product.id product.get_slug %}">{{ product.title }}</a>
+                                                        </h3>
+                                                        <div class="actions">
+                                                            {% include "shared/_AddToCardAndWishListBox.html" with the_product=product prefix="slider2" %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="swiper-button-next"></div>
+                                    <div class="swiper-button-prev"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+        </div>
+    </main>
+    <!-- content -->
+{% endblock %}
+
+
+{% block header_extra_ref %}
+    <link rel="stylesheet" href="{% static "" %}css/plugins/swiper-bundle.min.css">
+{% endblock %}
+
+{% block footer_extra_ref %}
+    <script src="{% static "" %}js/plugins/swiper-bundle.min.js"></script>
+    <script src="{% static "" %}js/plugins/swiper-activator.js"></script>
+    <script src="{% static "" %}js/plugins/ajax_add_to_favorites_and_cart.js"></script>
+{% endblock %}

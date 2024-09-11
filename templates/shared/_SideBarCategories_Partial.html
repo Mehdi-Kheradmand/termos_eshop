@@ -1,0 +1,38 @@
+<ul class="nav-categories ul-base">
+    {% for main_category in category_bar %}
+        <li>
+            <a href="#" data-toggle="collapse" data-target="#heading{{ forloop.counter }}" aria-expanded="false"
+                aria-controls="heading{{ forloop.counter }}">
+                {{ main_category.title }}
+                <i class="fal fa-angle-left"></i>
+            </a>
+
+            <div class="collapse" id="heading{{ forloop.counter }}">
+                <ul>
+                    {% for sub_category in main_category.sub_menus %}
+                                <li class="has-sub">
+                                    <a href="{% url "module_products:urls_product_list_sub_category" main_category.slug sub_category.slug %}">
+                                        {{ sub_category.title }}
+                                    </a>
+                                </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </li>
+    {% endfor %}
+
+{#                    <li>#}
+{#                        <a href="#" data-toggle="collapse" data-target="#headingSix" aria-expanded="false"#}
+{#                            aria-controls="headingSix">#}
+{#                            ابزار و الکترونیک#}
+{#                            <i class="fal fa-angle-left"></i>#}
+{#                        </a>#}
+{#                        <div class="collapse" id="headingSix">#}
+{#                            <ul>#}
+{#                                <li class="has-sub"><a href="#">لوازم جانبی گوشی</a></li>#}
+{#                                <li class="has-sub"><a href="#">گوشی موبایل</a></li>#}
+{#                                <li class="has-sub"><a href="#">دوربین</a></li>#}
+{#                            </ul>#}
+{#                        </div>#}
+{#                    </li>#}
+</ul>

@@ -1,0 +1,120 @@
+
+{# این صفحه یه طراحی هایی هم برای وقتی که لاربر لاگین شده داره ولی فعلا وقتی کاربر لاگین شده این صفحه فراخوانی نمیشه#}
+
+<div class="offcanvas-header">
+    <div class="d-flex align-items-center justify-content-between mb-12">
+        {% if request.user.is_authenticated and main_order_cart %}
+            <strong>سبد خرید
+                <span id="side_cart_count" class="cart-count"> {{ header_cart.count }} </span>
+            </strong>
+        {% elif session_cart_items and not request.user.is_authenticated %}
+            <strong>سبد خرید
+                <span id="side_cart_count" class="cart-count"> {{ session_cart_items.number_of_cart_items }} </span>
+            </strong>
+        {% else %}
+            <strong>سبد خرید
+                <span id="side_cart_count" class="cart-count">0</span>
+            </strong>
+        {% endif %}
+        <div class="cart-sidebar-close close-sidebar" id="offcanvas-dismiss-cart">
+            <i class="fal fa-times"></i>
+        </div>
+    </div>
+</div>
+
+{#    ------------------------------------------------------------------------------------------#}
+
+
+
+<div class="offcanvas-shopping-cart-content">
+    <div class="wrapper">
+        <div class="scrollbar" id="style-1">
+            <div class="force-overflow">
+                <div class="offcanvas-body">
+                    <!--  Cart Items  -->
+                    <ul>
+                        <!-- items -->
+
+                        {% for product in session_cart_items.products.product_list %}
+                            <li class="cart-item">
+                                <span class="d-flex align-items-center mb-2">
+                                    <button type="button" onclick="remove_detail( {{ product.id }})" class="remove remove-from-cart-button">
+                                        <i class="fal fa-times"></i>
+                                    </button>
+                                    <a href="{% url "module_products:urls_product_detail" product.id product.get_slug %}">
+                                        <img src="{{ product.main_small_image.url }}" alt="cart">
+                                    </a>
+                                    <a href="{% url "module_products:urls_product_detail" product.id product.get_slug %}">
+                                        <span class="titleCart"> {{ product.title }} </span>
+                                        <div class="quantityCart">
+
+                                            {% for count in session_cart_items.products.count_list %}
+                                                {% if forloop.parentloop.counter == forloop.counter %}
+                                                    {{ count }} ×
+                                                {% endif %}
+                                            {% endfor %}
+
+                                            <span class="price"> {{ product.get_price_with_comma }}
+                                                <span class="amount">تومان</span>
+                                            </span>
+                                        </div>
+                                    </a>
+                                </span>
+                            </li>
+                        {% endfor %}
+
+
+
+
+                    </ul>
+                    <!--  Cart Items  -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="offcanvas-footer">
+    <div class="mini-cart-total total">
+        <strong>جمع كل سبد خريد:</strong>
+        {% if request.user.is_authenticated and main_order_cart %}
+            {#    User is logged in and has a cart   #}
+            <span class="price fl"> {{ total_cart_price }}
+                <span class="amount">تومان</span>
+            </span>
+        {% elif session_cart_items and not request.user.is_authenticated %}
+            {#    User is Not logged in but has a cart in session  #}
+            <span class="price fl"> {{ session_cart_items.total_cart_price_with_comma }}
+                <span class="amount">تومان</span>
+            </span>
+        {% else %}
+            {#    There in no cart   #}
+            <span class="price fl"> 0
+                <span class="amount">تومان</span>
+            </span>
+        {% endif %}
+
+    </div>
+    <div class="mini-cart-actions">
+        <a href=" {% url "module_orders:urls_cart" %}" class="forward">مشاهده سبد خرید</a>
+
+        {% if request.user.is_authenticated and main_order_cart %}
+            {#    User is logged in and has a cart   #}
+            {% if total_cart_price != 0 and total_cart_price != '0' %}
+                <a href="{% url "module_orders:urls_checkout" %}" class="checkout">تسویه حساب</a>
+            {% else %}
+                <button disabled href="{% url "module_orders:urls_checkout" %}" class="checkout btn-order-tracking">تسویه حساب</button>
+            {% endif %}
+        {% elif session_cart_items and not request.user.is_authenticated %}
+            {#    User is Not logged in but has a cart in session  #}
+            {% if session_cart_items.total_cart_price_with_comma != 0 and session_cart_items.total_cart_price_with_comma != '0' %}
+                <a href="{% url "module_orders:urls_checkout" %}" class="checkout">تسویه حساب</a>
+            {% else %}
+                <button disabled href="{% url "module_orders:urls_checkout" %}" class="checkout btn-order-tracking">تسویه حساب</button>
+            {% endif %}
+        {% else %}
+            {#    There in no cart   #}
+            <button disabled href="{% url "module_orders:urls_checkout" %}" class="checkout btn-order-tracking">تسویه حساب</button>
+        {% endif %}
+    </div>
+</div>

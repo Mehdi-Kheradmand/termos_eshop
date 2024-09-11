@@ -1,0 +1,237 @@
+{% extends "shared/MainLayout.html" %}
+{% load static %}
+
+{% block content %}
+    <!-- content -->
+    <main class="content">
+        <div class="container">
+            {% include "includes/OrederSteps.html" %}
+            <div class="checkout">
+
+                <form action="" method="post" class="checkout-form woocommerce-checkout">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-lg-6 col-xs-12">
+                            <div class="customer-details">
+                                <div class="woocommerce-billing-fields">
+                                    <h3>مشخصات گیرنده مرسوله</h3>
+                                    <div class="woocommerce-billing-fields-field-wrapper">
+                                        <!-- item -->
+                                        <div class="form-row form-row-first validate-required">
+                                            <label for="billing-first-name" class="first-name">نام
+                                                <abbr class="required" title="ضروری">*</abbr>
+                                            </label>
+                                            <span class="woocommerce-input-wrapper">
+                                                <input type="text" class="input-first-name" name="billing-first-name"
+                                                    id="billing-first-name" value="{{ request.user.useraddress_set.first.name }} {{ request.user.useraddress_set.first.family }}" disabled>
+                                            </span>
+                                        </div>
+                                        <!-- item -->
+                                        <div class="form-row form-row-first validate-required">
+                                            <label for="billing-address" class="">آدرس پستی
+                                                <abbr class="required" title="ضروری">*</abbr>
+                                            </label>
+                                            <span class="woocommerce-input-wrapper">
+                                                <input type="text" class="input-billing-address" name="billing-address"
+                                                    id="billing-address" placeholder="خیابان کوچه و..." disabled value="{{ request.user.useraddress_set.first.address_detail }}">
+                                            </span>
+                                        </div>
+                                        <!-- item -->
+                                        <div class="form-row form-row-first validate-required">
+                                            <label for="billing-phone" class="">تلفن
+                                                <abbr class="required" title="ضروری">*</abbr>
+                                            </label>
+                                            <span class="woocommerce-input-wrapper">
+                                                <input type="text" class="input-billing-phone" name="billing-phone"
+                                                    id="billing-phone" value="{{ request.user.useraddress_set.first.phone }}" disabled>
+                                            </span>
+                                        </div>
+                                        <!-- item -->
+                                        <div class="form-row form-row-first validate-required">
+                                            <label for="billing-email" class="">ایمیل
+                                                <abbr class="required" title="ضروری">*</abbr>
+                                            </label>
+                                            <span class="woocommerce-input-wrapper">
+                                                <input type="text" class="input-billing-email" name="billing-email"
+                                                    id="billing-email" value="{{ request.user.useraddress_set.first.email }}" disabled>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="woocommerce-additional-fields">
+                                    <div class="additional-fields-field-wrapper">
+                                        <div class="form-row form-row-first validate-required">
+                                            <label for="order-comments" class="">یادداشت سفارش
+                                                <span class="optional">(اختیاری)</span>
+                                            </label>
+                                            <span class="woocommerce-input-wrapper">
+                                                <textarea name="order-notes" class="input-text " id="order-notes"
+                                                    placeholder="یادداشت ها درباره سفارش شما ، برای مثال نکات مهم برای تحویل بار "
+                                                    rows="2" cols="5">{% if request.user.useraddress_set.first.order_notes %}{{ request.user.useraddress_set.first.order_notes }}{% endif %}</textarea>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a type="button" href="{% url "module_profile:urls_profile_address_edit" %}" class="btn btn-secondary woocommerce-checkout-place-order">ویرایش آدرس و مشخصات</a>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-xs-12">
+                            <h3 id="order-review-heading">سفارش شما</h3>
+                            <div class="woocommerce-checkout-review-order">
+                                <table class="table woocommerce-checkout-review-order-table">
+                                    <thead>
+                                        <tr>
+                                            <th class="product-name">محصول</th>
+                                            <th class="product-total"> قیمت کل </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+
+                                            {% for detail_cart in main_order_cart.get_order_details %}
+                                                <tr class="cart_item">
+                                                    <td class="product-name">
+                                                         {{ detail_cart.product.title }}
+                                                        <strong class="product-quantity">( {{ detail_cart.count }}  عدد )</strong>
+                                                    </td>
+                                                    <td class="product-total">
+                                                        <span class="price">{{ detail_cart.total_price_with_comma }}
+                                                            <span class="amount">تومان</span>
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+
+
+
+
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="cart-subtotal">
+                                            <th> جمع‌سبد‌خرید </th>
+                                            <td>
+                                                <span class="price">{{ main_order_cart.get_total_price_with_comma }}
+                                                    <span class="amount">تومان</span>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr class="shipping-totals">
+                                            <th>حمل و نقل</th>
+
+
+
+
+                                            {% if main_order_cart %}
+                                                {% if site_settings.transport_limit %}
+                                                    {% if main_order_cart.get_total_price >= site_settings.get_transport_limit_price %}
+                                                        <td>رایگان</td>
+                                                    {% else %}
+                                                        <td>{{ site_settings.get_transport_price_with_comma }} تومان
+                                                        </td>
+                                                    {% endif %}
+                                                {% else %}
+                                                    {# Disabled means all of consignments have to pay the shipping-cost (transport_price) #}
+                                                    <td>{{ site_settings.get_transport_price_with_comma }} تومان
+                                                    </td>
+                                                {% endif %}
+                                            {% endif %}
+
+
+{#                                            {% if main_order_cart.get_transport_value != 0 %}#}
+{#                                                <td>{{ main_order_cart.get_transport_value_with_comma }} تومان</td>#}
+{#                                            {% else %}#}
+{#                                                <td>رایگان</td>#}
+{#                                            {% endif %}#}
+
+
+
+                                        </tr>
+                                        <tr class="order-total">
+                                            <th> قیمت‌ ‌نهایی ‌قابل‌ پرداخت </th>
+                                            <td>
+                                                <span class="price">{{ main_order_cart.get_total_price_plus_transport_with_comma }}
+                                                    <span class="amount">تومان</span>
+                                                </span>
+                                            </td>
+                                        </tr>
+{#                                        <tr class="cart-discount">#}
+{#                                            <th>تخفیف شما از این خرید</th>#}
+{#                                            <td>#}
+{#                                                <span class="price">9,700,000#}
+{#                                                    <span class="amount">تومان</span>#}
+{#                                                </span>#}
+{#                                            </td>#}
+{#                                        </tr>#}
+                                    </tfoot>
+                                </table>
+                                <div class="woocommerce-checkout-payment">
+                                    <ul class="payment-methods">
+                                        <li>
+                                            <div class="accordion" id="accordionExample">
+                                                <div class="card-header" id="headingOne">
+                                                    <div class="card">
+                                                        <button class="btn btn-block text-right pr-0" type="button"
+                                                            data-toggle="collapse" data-target="#collapseTwo"
+                                                            aria-expanded="true" aria-controls="collapseTwo">
+                                                            <div class="radio-col mt-2">
+                                                                <label for="online-payment2" class="outline-radio">
+                                                                    <input type="radio" name="online-payment2" id="online-payment2" checked>
+                                                                    <span class="outline-radio-check"></span>
+                                                                </label>
+                                                                <label for="online-payment2"
+                                                                    class="shipping-totals-title-row">
+                                                                    <div class="shipping-totals-title">پرداخت اینترنتی</div>
+                                                                </label>
+                                                            </div>
+                                                        </button>
+                                                        <div id="collapseTwo" class="collapse"
+                                                            aria-labelledby="headingTwo"
+                                                            data-parent="#accordionExample">
+                                                            <div class="payment-box payment-method-cheque">
+                                                                <p>پرداخت امن به وسیله کلیه کارت های عضو شتاب</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                    <div class="form-row place-order">
+                                        <div class="woocommerce-terms-and-conditions-wrapper">
+                                            {% if force_terms %}
+                                                <label class="alert-danger">قبول قوانین و شرایط جهت خرید از فروشگاه الزامی میباشد</label>
+                                            {% endif %}
+                                            <div class="form-auth-row">
+                                                <label for="#" class="ui-checkbox">
+                                                    <input type="checkbox" value="1" name="accept_terms" id="accept_terms">
+                                                    <span class="ui-checkbox-check"></span>
+                                                </label>
+                                                <label class="remember-me">
+                                                    من قوانین و مقررات
+                                                    <a href="{% url "urls_terms" %}" class="woocommerce-terms-and-conditions-link">شرایط و
+                                                        مقررات</a>
+                                                    را خواندم و آن را می پذیرم.
+                                                    <span class="required">*</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <button type="submit"
+                                            class="btn btn-secondary woocommerce-checkout-place-order">پرداخت و ثبت سفارش
+                                            </button>
+                                    </div>
+                                </div>
+                            </div>
+{#                            <span class="lead-time checkout-time">#}
+{#                                <i class="fal fa-truck"></i>#}
+{#                                زمان تقریبی تحویل#}
+{#                                از ۰۱ آذر تا ۰۱ آذر#}
+{#                            </span>#}
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+    <!-- content -->
+{%  endblock %}
+

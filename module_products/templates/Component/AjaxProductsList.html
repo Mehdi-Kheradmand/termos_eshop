@@ -1,0 +1,170 @@
+<div class="sidebar-listing">
+    <div class="row mb-5">
+        {% include "Component/ProductListSidebarWidget.html" with page_obj=page_obj %}
+
+        <div class="col-lg-9 col-xs-12">
+            <header class="products-header">
+                <h1 class="title">
+                    <i class="fal fa-poll-h"></i>
+                    <input id="q" type="hidden" value="{{ q }}">
+                    {% if q and q != 'None' %}
+                        <span>جستجو: "{{ q }}"</span>
+                    {% elif main_category.title %}
+                        {{ main_category.title }}
+                        {% if sub_category %}
+                             > {{ sub_category.title }}
+                        {% endif %}
+                    {% else %}
+                        <span>لیست محصولات</span>
+                    {% endif %}
+                </h1>
+            </header>
+            <div class="shop-control-bar">
+                <p class="woocommerce-result-count">
+                     {{ found_product_count }} محصول یافت شد</p>
+                <div class="archive-filter-btn get-sidebar" id="sidebar-trigger-cart" onclick="show_sidebar_filter()">
+                    <i class="fal fa-sliders-h"></i>
+                    فیلـتر
+                </div>
+            </div>
+            <div class="js-listing">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                        data-toggle="dropdown" aria-expanded="false">
+                        {% if sort_order == "cheapest-tab" %}
+                            ارزان‌ترین
+                        {% elif sort_order == "most-expensive-tab" %}
+                            گران‌ترین
+                        {% elif sort_order == "newest-tab" %}
+                            جدیدترین
+                        {% else %}
+                            مرتب سازی براساس
+                        {% endif %}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <ul class="nav nav-tabs sort-tabs-options sort-main" id="myTab" role="tablist">
+{#                            <li class="nav-item" role="presentation">#}
+{#                                <a class="nav-link active show" id="Most-visited-tab" data-toggle="tab"#}
+{#                                    href="#Most-visited" role="tab" aria-controls="Most-visited"#}
+{#                                    aria-selected="true">پربازدیدترین</a>#}
+{#                            </li>#}
+{#                            <li class="nav-item" role="presentation">#}
+{#                                <a class="nav-link" id="Bestselling-tab" data-toggle="tab"#}
+{#                                    href="#Bestselling" role="tab" aria-controls="Bestselling"#}
+{#                                    aria-selected="false">پرفروش‌ترین‌</a>#}
+{#                            </li>#}
+{#                            <li class="nav-item" role="presentation">#}
+{#                                <a class="nav-link" id="Most-Popular-tab" data-toggle="tab"#}
+{#                                    href="#Most-Popular" role="tab" aria-controls="Most-Popular"#}
+{#                                    aria-selected="false">محبوب‌ترین</a>#}
+{#                            </li>#}
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="newest-tab" data-toggle="tab" href="#newest"
+                                    role="tab" aria-controls="newest" aria-selected="false">جدیدترین</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="cheapest-tab" data-toggle="tab" href="#cheapest"
+                                    role="tab" aria-controls="cheapest" aria-selected="false">ارزان‌ترین</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="most-expensive-tab" data-toggle="tab"
+                                    href="#most-expensive" role="tab" aria-controls="most-expensive"
+                                    aria-selected="false">گران‌ترین</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                {% include "Component/ProductListProducts.html" %}
+            </div>
+        </div>
+
+
+        <!-- mobile filter -->
+        <div class="togglesidebar filter-sidebar">
+            <div class="cart-sidebar">
+                <div class="sidebar-header">
+                    <div class="d-flex align-items-center justify-content-between mb-12">
+                        <strong>فیلـتر</strong>
+                        <div class="cart-sidebar-close close-sidebar" id="sidebar-dismiss-cart">
+                            <i class="fal fa-times"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="sidebar-widget">
+                    <div class="widget woocommerce widget-price-filter">
+                        <div class="widget-title">فیلتر براساس قیمت :</div>
+                        <div class="widget-content">
+
+
+
+
+
+
+                            <!-- 2 Mobile -->
+                            <form method="get">
+                                <div class="mt-5 mb-4">
+                                    <div id="slider-non-linear-step2"></div>
+                                </div>
+
+                                <div class="filter-range mt-2 mb-2">
+                                    <div class="mt-2">
+                                        <div class="filter-content">
+                                            <button type="button" class="btn btn-range applyPriceFilterBtn" id="btn_add_filter2">
+                                                انجام فیلتر
+                                            </button>
+                                            <span>قیمت: از</span>
+                                            <span class="example-val"
+                                                id="slider-non-linear-step-value2"></span>
+                                            تومان
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+
+
+
+
+
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="sidebar-overlay"></div>
+    </div>
+</div>
+<div class="paginationMain">
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <li class="page-item">
+                {% if page_obj.has_previous %}
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                {% endif %}
+            </li>
+
+            {% for page in paginator.page_range %}
+                {% if page == page_obj.number %}
+                {# active #}
+                    <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+                {% else %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>

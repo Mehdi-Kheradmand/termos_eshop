@@ -1,0 +1,50 @@
+{% extends "shared/MainLayout.html" %}
+{% load static %}
+
+{% block content %}
+    <!-- content -->
+    <main class="content">
+        <div class="container">
+            <div class="order-steps">
+                <div class="checkout-breadcrumb">
+                    <div class="title-cart">
+                        <i class="fal fa-bags-shopping"></i>
+                        <a>
+                            <h4>سبد خرید</h4>
+                        </a>
+                    </div>
+                    <div class="title-checkout">
+                        <i class="fal fa-file-invoice"></i>
+                        <a>
+                            <h4>جزئیات پرداخت</h4>
+                        </a>
+                    </div>
+                    <div class="title-thankyou">
+                        <i class="fal fa-receipt"></i>
+                        <a>
+                            <h4>تکمیل سفارش</h4>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="checkout">
+                <div class="text-center">
+                    <div class="icon-success">
+                        <i class="fal fa-check"></i>
+                    </div>
+                    <div class="order-success">
+                        <div class="h4 font-weight-bold mb-4">پرداخت با موفقیت انجام شد</div>
+                        <div class="font-weight-bold mb-12">سفارش شما ثبت شد و به زودی پردازش خواهد شد. شما میتوانید در بخش پنل کاربری وضعیت سفارش‌ها خود را مشاهده نمایید</div>
+                    </div>
+                    <div class="order-actions">
+                        <a href="{% url "module_profile:urls_profile_order_detail" order_id %}" class="btn btn-primary btn-order-tracking">
+                            <i class="fal fa-shopping-bag"></i>
+                            پیگیری سفارش
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- content -->
+{% endblock %}

@@ -1,0 +1,173 @@
+{% extends "shared/_ProfileMainLayout.html" %}
+{% load static %}
+
+{% block extrajs %}
+    <script src="{% static "" %}js/plugins/ajax_add_to_favorites_and_cart.js"></script>
+{% endblock %}
+
+{% block row %}
+                <div class="row">
+                    <div class="col-lg-6 col-xs-12">
+                        <div class="widget">
+                            <div class="widget-title">
+                                اطلاعات شخصی
+                                <a href="{% url "module_profile:urls_profile_edit_profile" %}" class="widget-link">ویرایش اطلاعات</a>
+                            </div>
+
+
+
+                            <div class="widget-content user-detail-dashboard">
+                                <div class="widget-content-item">
+                                    <strong>نام</strong>
+                                </div>
+                                <div class="widget-content-item">
+                                    <span>{{ request.user.first_name }}</span>
+                                </div>
+
+                                <div class="widget-content-item">
+                                    <strong>نام خانوادگی</strong>
+                                </div>
+                                <div class="widget-content-item">
+                                    <span>{{ request.user.last_name }}</span>
+                                </div>
+
+
+                                <div class="widget-content-item">
+                                    <strong>شماره موبایل</strong>
+                                </div>
+                                <div class="widget-content-item">
+                                    <span>{{ request.user.useradditional.Phone }}</span>
+                                </div>
+                                <div class="widget-content-item">
+                                    <strong>ایمیل</strong>
+                                </div>
+                                <div class="widget-content-item">
+                                    <span>{{ request.user.email }}</span>
+                                </div>
+                                <div class="widget-content-item">
+                                    <strong>عضویت</strong>
+                                </div>
+                                <div class="widget-content-item">
+                                    <span>{{ request.user.date_joined.date }}</span>
+                                </div>
+
+                                <div class="widget-content-item">
+                                    <strong>تعداد سفارش‌های ثبت شده</strong>
+                                </div>
+                                <div class="widget-content-item">
+                                    <span>{{ user_paid_orders.count }}</span>
+                                </div>
+
+
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                    {#          WISHLIST          #}
+                    {% csrf_token %}
+                    <div class="col-lg-6 col-xs-12" id="dashboard-wishlist-layout">
+                        {% include "profile/ProfileLayout/DashboardWishlistLayout.html" with wish_list=wish_list %}
+                    </div>
+                    {#          WISHLIST          #}
+
+                </div>
+
+
+
+
+                <!-- Recent Orders -->
+                <div class="widget">
+                    <div class="widget-title">
+                        آخرین سفارشات
+                    </div>
+                    <div class="widget-content">
+                        <table class="table table-orders table-responsive">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">شماره سفارش</th>
+                                    <th scope="col">تاریخ ثبت سفارش</th>
+                                    <th scope="col">تعداد محصول</th>
+                                    <th scope="col">مبلغ سفارش</th>
+                                    <th scope="col">عملیات پرداخت</th>
+                                    <th scope="col">وضعیت</th>
+                                    <th scope="col">جزئیات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in user_paid_orders|slice:":20" %}
+                                    <tr>
+                                    <td>{{ order.get_id_plus_1000 }}</td>
+                                    <td>{{ order.payment_date }}</td>
+                                    <td>{{ order.get_amount }}</td>
+                                    <td>
+                                        <span class="price text-primary">{{ order.get_total_price_plus_transport_with_comma }}
+                                            <span class="amount text-secondary">تومان</span>
+                                        </span>
+                                    </td>
+
+
+                                        <td>
+{#                                            <!-- payment_status -->#}
+                                            {% if order.payment_status == 0 %}
+                                                <div class="success-payment align-content-center">پرداخت موفق</div>
+                                            {% elif order.payment_status == 1 %}
+                                                <div class="rounded-pill bg-warning align-content-center text-light" style="padding-left:10pt; padding-right: 10pt">ناموفق -
+                                                        <a class="text-info" href="{% url "module_orders:urls_checkout_repay" order.id %}"> پرداخت مجدد</a>
+                                                </div>
+                                            {% elif order.payment_status == 2 %}
+                                                <span class="rounded-pill bg-info align-content-center text-light" style="padding-left:10pt; padding-right: 10pt">درحال‌بررسی</span>
+                                            {% elif order.payment_status == 3 %}
+                                                <div class="text-danger align-content-center">لغو شده</div>
+                                            {% elif order.payment_status == 4 %}
+                                                <div class="text-warning align-content-center">مرجوع شده</div>
+                                            {% else %}
+                                                <div class="text-info align-content-center">درحال‌بررسی</div>
+                                            {% endif %}
+
+                                        </td>
+                                        <td>
+                                            {% if order.package_status == -1 %}
+                                                {% if order.error_message %}
+                                                    <div class="alert-warning align-content-center">{{ order.error_message }}</div>
+                                                {% else %}
+                                                    <div class="alert-warning align-content-center">نامعلوم</div>
+                                                {% endif %}
+                                            {% elif order.package_status == 0 %}
+                                                {% if order.payment_status == 0 %}
+                                                    <div class="alert-info align-content-center">درحال‌جمع‌آوری</div>
+                                                {% elif order.payment_status == 4 %}
+                                                    <div class="alert-warning align-content-center">درحال‌بررسی</div>
+                                                {% endif %}
+                                            {% elif order.package_status == 1 %}
+                                                {% if order.payment_status == 0 %}
+                                                    <div class="alert-info align-content-center">بسته‌بندی‌ شده</div>
+                                                {% elif order.payment_status == 4 %}
+                                                    <div class="alert-success align-content-center">هزینه‌برگشت ‌خورده</div>
+                                                {% endif %}
+                                            {% elif order.package_status == 2 %}
+                                                {% if order.payment_status == 0 %}
+                                                    <div class="alert-success align-content-center">ارسال شده</div>
+                                                {% elif order.payment_status == 4 %}
+                                                    <div class="alert-danger align-content-center">غیر‌قابل‌ قبول</div>
+                                                {% endif %}
+                                            {% else %}
+                                                <div class="alert-warning align-content-center">{{ order.package_status }}نامعلوم </div>
+                                            {% endif %}
+                                        </td>
+
+                                    <td>
+                                        <a href="{% url "module_profile:urls_profile_order_detail" order.id %}" class="details">
+                                            <i class="fal fa-angle-left"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+{% endblock %}

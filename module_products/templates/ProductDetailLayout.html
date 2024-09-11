@@ -1,0 +1,192 @@
+{% extends "shared/MainLayout.html" %}
+{% load static %}
+
+{% block header_extra_ref %}
+    <link rel="stylesheet" href="{% static "" %}css/plugins/noUISlider.min.css">
+    <link rel="stylesheet" href="{% static "" %}css/plugins/light-zoom.min.css">
+    <link rel="stylesheet" href="{% static "" %}css/plugins/magnific-popup.css">
+    <link rel="stylesheet" href="{% static "" %}css/plugins/bootstrap-slider.min.css">
+    <link rel="stylesheet" href="{% static "" %}css/plugins/swiper-bundle.min.css">
+{% endblock %}
+
+{% block content %}
+    <!-- content -->
+    <main class="content">
+        <div class="single-product">
+            <div class="container">
+                <nav aria-label="breadcrumb" class="breadcrumb-nav">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">خانه</a></li>
+                        {% if main_category %}
+                            <li class="breadcrumb-item" aria-current="page">
+                                 <a href="{% url "module_products:urls_products_list" main_category.slug %}">{{ main_category.title }}</a>
+                            </li>
+                        {% endif %}
+                        {% if sub_category %}
+                            <li class="breadcrumb-item" aria-current="page">
+                                <a href="{% url "module_products:urls_product_list_sub_category" main_category.slug sub_category.slug %}">{{ sub_category.title }}</a>
+                            </li>
+                        {% endif %}
+                    </ol>
+                </nav>
+
+
+                <div class="product type-product">
+                    <div class="row">
+                        <!-- Gallery -->
+                        <div class="col-lg-7 col-md-7 col-xs-12">
+                            {% include "Component/ProductDetailGallery.html" with product=the_product %}
+                        </div>
+                        <div class="col-lg-5 col-md-5 col-xs-12">
+                            <div class="product-info">
+
+
+
+
+
+{#                                <form method="post" action="{% url "module_orders:urls_cart" %}">#}
+                                <form method="post" action="#">
+                                    {% csrf_token %}
+                                    <div class="product-headline">
+                                        <h1 class="product-title"> {{ product.title }}
+    {#                                    <span class="sub-head">Apple iPhone 12 A2404 Dual SIM 128GB Mobile Phone</span>#}
+                                        </h1>
+                                    </div>
+                                    <div class="product-meta">
+                                        <span class="posted">
+                                            <span class="detail-label">دسته : </span>
+                                            <span class="detail-content">
+                                                {% if main_category %}
+                                                    <a href="{% url "module_products:urls_products_list" main_category.slug %}">
+                                                        {{ main_category.title }}
+                                                    </a>
+                                                {% else %}
+                                                    بدون دسته بندی
+                                                {% endif %}
+
+                                                {% if sub_category and main_category%}
+                                                ,
+                                                    <a href="{% url "module_products:urls_product_list_sub_category" main_category.slug sub_category.slug %}">{{ sub_category.title }}</a>
+                                                {% endif %}
+
+                                            </span>
+                                        </span>
+                                    </div>
+                                    <div class="price">
+    {#                                    <del>#}
+    {#                                        <span class="price-amount">{{ product.price }}#}
+    {#                                            <span class="price-currencySymbol">تومان</span>#}
+    {#                                        </span>#}
+    {#                                    </del>#}
+                                        <ins>
+                                            {% if the_product.stock > 0 %}
+                                                <span class="price-amount">{{ the_product.get_price_with_comma }}
+                                                    <span class="price-currencySymbol">تومان</span>
+                                                </span>
+                                            {% else %}
+                                                <span class="price-amount">ناموجود</span>
+                                            {% endif %}
+                                        </ins>
+                                    </div>
+                                    {{ order_form.product_id }}
+                                    <div class="add-to-cart">
+                                        <div class="quantity">
+{#                                            <input type="number" min="1" max="{{ product.stock }}" step="1" value="1">#}
+                                            {{ order_form.order_count }}
+                                            {% if the_product.stock > 0 %}<div class="quantity-nav"></div>{% endif %}
+                                        </div>
+                                        {% if the_product.stock > 0 %}
+                                            <button type="button" class="btn btn-success add-to-cart-btn" id="btn_add_to_cart" onclick="add_to_cart({{ the_product.id }}, this.id)">
+                                                <i class="fal fa-cart-arrow-down"></i>
+                                                افزودن به سبد خرید
+                                            </button>
+                                        {% else %}
+                                            <button type="button" disabled class="btn btn-danger add-to-cart-btn" id="btn_add_to_favorites">
+                                                <i class="fal fa-cart-arrow-down"></i>
+                                                ناموجود
+                                            </button>
+                                        {% endif %}
+
+{#                                       For admin#}
+                                        {% if request.user.is_superuser %}
+                                            <a class="btn btn-outline-dark add-to-cart-btn" href="{% url "admin_product_editor" the_product.id %}">
+                                                <i class="fal fa-tools"></i>
+                                                ویرایش‌ محصول
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                </form>
+
+
+
+
+                            </div>
+                            <div class="product-seller-info">
+                                <hr>
+                                <div class="product-seller-row">
+                                    <div class="product-stock">
+                                        {% if the_product.stock > 0 %}
+                                            <i class="fal fa-check-square"></i>
+                                            <span> موجود است (تعداد موجود در انبار {{ the_product.stock }})</span>
+                                        {% else %}
+                                            <i class="fal fa-exclamation-circle" style="color: red"></i>
+                                            <span>ناموجود</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                {% if the_product.stock > 0 %}
+                                    <div class="product-seller-row">
+                                        <span class="lead-time-ready">
+                                            <i class="fal fa-truck-loading"></i>
+                                            آماده ارسال
+                                        </span>
+                                    </div>
+                                {% endif %}
+                                <div class="product-actions">
+                                    <div class="add-to-wishlist fl">
+                                        <a href="#" id="wish_a_{{ the_product.id }}" onclick="add_to_wishlist({{ the_product.id }}, this.id)" class="btn btn-light wishlist{% if request.user in the_product.wisher_users.all %} active{% endif %}">
+                                            <i id="wish_fa_{{ the_product.id }}" class="fal fa-heart"></i>
+                                            لیست علاقه مندی
+                                        </a>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="product-feature">
+                                    <div class="service-item">
+                                        <img src="{% static "" %}images/service/price-tag-1.png" alt="service">
+                                        بهترین قیمت
+                                    </div>
+                                    <div class="service-item">
+                                        <img src="{% static "" %}images/service/box.png" alt="service">
+                                        ارسال محصول مطابق تصویر
+                                    </div>
+                                    <div class="service-item">
+                                        <img src="{% static "" %}images/service/delivery-truck-3.png" alt="service">
+                                        ارسال رایگان بالای {{ site_settings.get_transport_limit_price_with_comma }} تومان
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tabs -  Comments - Description -->
+                    {% include "Component/ProductDetailTabs.html" with product=the_product %}
+                </div>
+
+            </div>
+        </div>
+    </main>
+    <!-- content -->
+{% endblock %}
+
+{% block footer_extra_ref %}
+    <script src="{% static "" %}js/plugins/swiper-bundle.min.js"></script>
+    <script src="{% static "" %}js/plugins/theia-sticky-sidebar.min.js"></script>
+    <script src="{% static "" %}js/plugins/nouislider.min.js"></script>
+    <script src="{% static "" %}js/plugins/wNumb.js"></script>
+    <script src="{% static "" %}js/plugins/lightzoom.min.js"></script>
+    <script src="{% static "" %}js/plugins/jquery.magnific-popup.min.js"></script>
+    <script src="{% static "" %}js/plugins/bootstrap-slider.min.js"></script>
+    <script src="{% static "" %}js/plugins/ajax-product-detail.js"></script>
+    <script src="{% static "" %}js/plugins/ajax_add_to_favorites_and_cart.js"></script>
+{% endblock %}

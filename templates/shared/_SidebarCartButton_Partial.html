@@ -1,0 +1,23 @@
+
+{# sidebar cart > the header button and its number #}
+
+<div class="user-item cart-list" id="ajax_header_cart_button">
+    <div class="top-icons shop-cart" id="offcanvas-trigger-cart">
+        <a id="side_cart_btn" href="#">
+            <i class="fal fa-shopping-bag"></i>
+            <div class="cart-title">
+                <span>سبد خرید</span>
+
+                {% if request.user.is_authenticated and main_order_cart %}
+                    <div id="header_cart_count" class="shop-badge header-cart-count">{{ main_order_cart.get_amount }}</div>
+                {% elif session_cart_items and not request.user.is_authenticated %}
+                    <div id="header_cart_count" class="shop-badge header-cart-count">{{ session_cart_items.number_of_cart_items }}</div>
+                {% else %}
+                    <div id="header_cart_count" class="shop-badge header-cart-count">0</div>
+                {% endif %}
+
+
+            </div>
+        </a>
+    </div>
+</div>

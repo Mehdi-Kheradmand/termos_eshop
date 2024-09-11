@@ -1,0 +1,36 @@
+<div class="widget">
+    <div class="widget-title">
+        علاقه مندی ها
+        <a href="{% url "module_profile:urls_profile_wishlist" %}" class="widget-link">مشاهده همه</a>
+    </div>
+    <div class="widget-content user-wishlist-dashboard">
+        <div class="horizontal-scroll">
+
+            {% for p_wish in wish_list|slice:":3" %}
+                <div class="item">
+                    <div class="item-area">
+                        <div class="product-image-area">
+                            <a href="{% url "module_products:urls_product_detail" p_wish.id p_wish.get_slug %}" class="product-image">
+                                <img src="{{ p_wish.main_small_image.url }}" alt="profile" class="img-fluid">
+                            </a>
+                        </div>
+                        <div class="product-detail-area">
+                            <h3 class="product-name">
+                                <a href="{% url "module_products:urls_product_detail" p_wish.id p_wish.get_slug %}" class="product-image">
+                                    {{ p_wish.title }}
+                                </a>
+                            </h3>
+                            <div class="wishlist-act">
+                                <a href="{% url "module_products:urls_product_detail" p_wish.id p_wish.get_slug %}" class="view">مشاهده</a>
+                                <div class="add-to-wishlist" >
+                                    <a onclick="add_to_wishlist({{ p_wish.id }})" href="#" id="wish_a_{{ p_wish.id }}" class="remove">حذف</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+    </div>
+</div>
