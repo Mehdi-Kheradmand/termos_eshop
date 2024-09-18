@@ -31,7 +31,7 @@ GOOGLE_SITE_KEY = os.environ.get('GOOGLE_SITE_KEY')
 SMS_API_TOKEN = os.environ.get('SMS_API_TOKEN')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG')
+DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
 ALLOWED_HOSTS = ['*']
 
