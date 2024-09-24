@@ -33,7 +33,7 @@ SMS_API_TOKEN = os.environ.get('SMS_API_TOKEN')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['www.termos.ir', 'termos.ir', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -112,24 +112,9 @@ else:
             'USER': os.environ.get('POSTGRES_USER'),
             'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
             'HOST': os.environ.get('POSTGRES_HOST', 'psql_container'),
-            'PORT': os.environ.get('POSTGRES_PORT', '5432'),
+            'PORT': '5432',
         }
     }
-
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'termosir_eshop_database',
-#         'USER': 'termosir_eshop_database_user',
-#         'PASSWORD': '7;9YmWwZ8)0pzM',
-#         'HOST': 'localhost',
-#         'PORT': 3306,
-#         'OPTIONS':{
-#             'sql_mode': 'STRICT_ALL_TABLES',
-#         }
-#     }
-# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -196,3 +181,28 @@ EMAIL_USE_SSL = os.environ.get('EMAIL_USE_SSL')
 # Optional SMTP authentication information for EMAIL_HOST.
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'django_errors.log',
+        },
+        'console': {
+            'level': 'DEBUG',  # You can change this level as needed
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file', 'console'],  # Add console here
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
+}
+
