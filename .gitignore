@@ -133,4 +133,6 @@ cython_debug/
 .idea/
 idea/
 data/
-assets/
+#assets/
+admin/
+media/
