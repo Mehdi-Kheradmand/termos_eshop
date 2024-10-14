@@ -15,6 +15,7 @@ from termos_eshop.Utilities import find_user_by_phone, is_ajax, google_recaptcha
     find_user_by_email, giveme_datetime_now_iran, giveme_remaining_time_for_verify, is_it_phone_number
 from module_SiteSettings.models import site_settings as site_settings_model
 from termos_eshop.smsclass import send_otp_sms
+import logging
 # -------------------------------------------- LOGIN ------------------------------------
 
 
@@ -31,6 +32,8 @@ def login_view(req):
 
 
 def ajax_email_phone(req):
+    logging.info("____ User Login Process  START _____")
+
     received_email_phone_form = EmailPhoneForm(req.POST or None)
     # received_otp_form = Form_OTP(req.POST or None)
     response = {'is_there_error': False, 'status': "Success : 200", 'outer': None, 'reload_recaptcha': False}
@@ -46,6 +49,7 @@ def ajax_email_phone(req):
                 response['reload_recaptcha'] = True
                 error_list = ["عبارت امنیتی درست نیست"]
                 response['error_list'] = error_list
+                logging.info("____ User Login Process  END _____")
                 return JsonResponse(response, status=200)
             else:  # success captcha
                 # check the entered Value
@@ -65,6 +69,7 @@ def ajax_email_phone(req):
                         outer = render_to_string(request=req, template_name="shared/UserOuterAjaxLayout.html", context=cont)
                         response['outer'] = outer
                         # response['user_phone'] = received_email_phone
+                        logging.info("____ User Login Process  END _____")
                         return JsonResponse(response, status=200)
                     else:
                         # error
@@ -72,10 +77,12 @@ def ajax_email_phone(req):
                         error_list = ["حساب کاربری با این مشخصات پیدا نشد. لطفا برای ثبت نام شماره موبایل خود را وارد "
                                       "کنید"]
                         response['error_list'] = error_list
+                        logging.info("____ User Login Process  END _____")
                         return JsonResponse(response, status=200)
 
                 else:  # Entered Phone Number --------------------------------------------------------------------------
                     # User Entered Phone Number, and it is already checked by forms validators
+                    logging.info("____ User Login Process  END _____")
                     return ajax_otp_reset(req=req, response=response, user_phone_number=received_email_phone)
 
         else:  # form has Errors ---------------------------------------------------------------------------------------
@@ -85,8 +92,11 @@ def ajax_email_phone(req):
                     error_list.append(error_msg)
             response['is_there_error'] = True
             response['error_list'] = error_list
+            logging.info("____ User Login Process  END _____")
             return JsonResponse(response, status=200)
     else:
+        logging.warning("Request is not Ajax")
+        logging.info("____ User Login Process  END _____")
         return bad_request_ajax_error(response)
 
 

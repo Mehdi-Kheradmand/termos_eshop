@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, Products_Gallery
+from .models import Product, ProductsGallery
 
 
 class product_admin(admin.ModelAdmin):
@@ -14,9 +14,9 @@ class product_admin_gallery(admin.ModelAdmin):
     list_display = ['__str__', 'big_image', 'small_image']
 
     class Meta:
-        model = Products_Gallery
+        model = ProductsGallery
 
 
 # Register your models here.
 admin.site.register(Product, product_admin)
-admin.site.register(Products_Gallery, product_admin_gallery)
+admin.site.register(ProductsGallery, product_admin_gallery)

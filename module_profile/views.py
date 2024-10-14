@@ -377,8 +377,8 @@ def seller_main_view(req):
                         saveNeeded = True
                         sendSmsNeeded = True
 
-                    if the_product.IncomingPrice != int(thePost['DataPrice[]'][index].strip().replace(',', '')):
-                        the_product.IncomingPrice = int(thePost['DataPrice[]'][index].strip().replace(',', ''))
+                    if the_product.incoming_price != int(thePost['DataPrice[]'][index].strip().replace(',', '')):
+                        the_product.incoming_price = int(thePost['DataPrice[]'][index].strip().replace(',', ''))
                         saveNeeded = True
                         sendSmsNeeded = True
 

@@ -3,7 +3,7 @@ from django.db import models
 from django.http import Http404
 
 
-class Product_Manager(models.Manager):
+class ProductManager(models.Manager):
     def get_active_products(self):
         return self.get_queryset().filter(active=True)
 
